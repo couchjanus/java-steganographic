@@ -12,7 +12,10 @@ import static javax.swing.GroupLayout.Alignment.BASELINE;
 import static javax.swing.GroupLayout.Alignment.LEADING;
 
 import java.awt.*;
+import java.awt.image.*;
 import java.awt.event.*;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import java.util.Properties;
@@ -28,7 +31,7 @@ implements ActionListener {
     static final private String ANALIZE = "analize";
     static final private String SANIZE = "sanaze";
     
-    private JPanel mainPanel, leftPanel, rightPanel;
+    private JPanel mainPanel, leftPanel, rightPanel, imagePanel, topPanel, bottomPanel;
     
     DTPicture picture1, picture2, picture3;
     PictureTransferHandler picHandler;
@@ -82,7 +85,12 @@ implements ActionListener {
 //        setPreferredSize(new Dimension(800, 400));
         
         leftPanel = new JPanel();
-        leftPanel.setLayout(new GridLayout(1,1));
+        leftPanel.setLayout(new GridLayout(2,1));
+        
+        topPanel = new JPanel();
+        
+        bottomPanel = new JPanel();
+        
 //        leftPanel.setBackground(Color.GREEN);
         
 
@@ -105,9 +113,9 @@ implements ActionListener {
         backCheckBox.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
         
-        GroupLayout layout = new GroupLayout(leftPanel);
+        GroupLayout layout = new GroupLayout(topPanel);
         
-        leftPanel.setLayout(layout);
+        topPanel.setLayout(layout);
         
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
@@ -146,6 +154,14 @@ implements ActionListener {
                 .addComponent(cancelButton))
         );
 
+       bottomPanel.setLayout(new GridLayout(1,2));
+       
+       imagePanel = new JPanel();
+       imagePanel.setBackground(Color.GREEN);
+       bottomPanel.add(imagePanel);
+       
+       leftPanel.add(topPanel, BorderLayout.NORTH);
+       leftPanel.add(bottomPanel, BorderLayout.SOUTH);
        
         rightPanel = new JPanel();
         rightPanel.setLayout(new GridLayout(1,1));
@@ -314,7 +330,20 @@ implements ActionListener {
 		
 		Path path = Paths.get(file.getPath());
 		
-		
+		try {
+			BufferedImage img = ImageIO.read(new File(file.getPath()));
+			
+			JLabel imglbl = new JLabel();
+			ImageIcon icon = new ImageIcon(img);
+			imglbl.setIcon(icon); 
+			imagePanel.removeAll();
+			imagePanel.setBackground(Color.yellow);
+			imagePanel.add(imglbl);
+			this.revalidate();
+			
+		} catch(IOException ex) {
+			ex.printStackTrace();
+		}
 		
 		log.append("Current Directory: " + fc.getCurrentDirectory()
 		+ "." + newline);
