@@ -13,7 +13,7 @@ public class PicturePanel extends JPanel {
     
 	public PicturePanel() {
 		super();
-		setLayout(new GridLayout(2,1));
+		setLayout(new BorderLayout());
 		addControls();
 	}
 	
@@ -66,8 +66,8 @@ public class PicturePanel extends JPanel {
         
         topPanel.add(label);
         topPanel.add(findButton);
-        add(topPanel, BorderLayout.SOUTH);
-        add(imagePanel, BorderLayout.NORTH);
+        add(topPanel, BorderLayout.PAGE_START);
+        add(imagePanel, BorderLayout.PAGE_END);
     }
 
 }
