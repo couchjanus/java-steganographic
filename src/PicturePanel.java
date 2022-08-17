@@ -1,29 +1,51 @@
 import java.awt.*;
 
 import javax.swing.*;
+import javax.swing.border.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class PicturePanel extends JPanel {
 	private JFileChooser fc;
     static final private String ATTACH = "attach";
     private JPanel imagePanel, topPanel, bottomPanel;
+    ArrayList<String> imageList;
+    private int w, h;
     
-	public PicturePanel() {
+	public PicturePanel(ArrayList<String> imageList) {
 		super();
+		this.imageList = imageList;
 		setLayout(new BorderLayout());
 		addControls();
 	}
 	
+	private void putPicture(File file) {
+		removeAll();
+		w = getSize().width;
+		h = getSize().height;
+	
+		ImageScale image = new ImageScale(file);
+		JLabel picLabel = image.drawImage(w, h);
+		
+		setBackground(Color.yellow);
+		add(picLabel);
+		revalidate();
+		repaint();
+	}
+	
 	private void addControls()
 	{
-		topPanel = new JPanel();
-		imagePanel = new JPanel();
+
+		Border redline = BorderFactory.createLineBorder(Color.RED);
 		
-		JLabel label = new JLabel("Find What:");
-		JButton findButton = new JButton("Find");
+		JLabel label = new JLabel("Drag Abd Drop File HERE");
+		label.setBorder(redline);
+		label.setBounds(getVisibleRect());
+		
+		JButton findButton = new JButton("Brouse Image File");
 		
 		findButton.setActionCommand(ATTACH);
         findButton.setToolTipText("Open file");
@@ -46,28 +68,32 @@ public class PicturePanel extends JPanel {
         			if (returnVal == JFileChooser.APPROVE_OPTION) 
         			{
         				File file = fc.getSelectedFile();
-        				
-        				try {
-        					imagePanel.removeAll();
-        					BufferedImage img =	ImageScale.loadImage(file);
-        					ImageScale.drawRectangle(img);
-        					JLabel picLabel = ImageScale.drawImage(img);
-        					imagePanel.setBackground(Color.yellow);
-        					imagePanel.add(picLabel);
-        					imagePanel.revalidate();
-        					imagePanel.repaint();
-        				} catch(IOException ex) {
-        					ex.printStackTrace();
-        				}
+        				putPicture(file);
+        				imageList.add(file.getPath());
+        				System.out.println(imageList);
         			}
         		}
         	 }
         });
         
-        topPanel.add(label);
-        topPanel.add(findButton);
-        add(topPanel, BorderLayout.PAGE_START);
-        add(imagePanel, BorderLayout.PAGE_END);
+        
+        new FileDrop(System.out, label, new FileDrop.Listener() {
+			
+			@Override
+			public void filesDropped(File[] files) {
+				try {
+					putPicture(new File(files[0].getCanonicalPath()));
+					imageList.add(files[0].getCanonicalPath());
+    				System.out.println(imageList);
+				}catch(java.io.IOException e) {
+					
+				}
+				
+			}
+		});
+
+        add(label, BorderLayout.CENTER);
+        add(findButton, BorderLayout.PAGE_END);
     }
 
 }

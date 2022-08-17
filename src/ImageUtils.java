@@ -101,4 +101,24 @@ public class ImageUtils {
 		}
 	}
 	
+	
+	
+	public void lsbDecode(BufferedImage image) {
+		int h = image.getHeight();
+		int w = image.getWidth();
+		int currentBit = 0;
+		
+		for (int x = 0; x < w; x++) {
+			for (int y = 0; y < h; y++) {
+				int pixel = image.getRGB(x, y);
+				int r = (pixel >> 16) & 0xff;
+				int g = (pixel >> 8) & 0xff;
+				int b = pixel & 0xff;
+				
+//				int avg = (r + b + g) / 3;
+				pixel = (a << 24) | (avg << 16) | (avg << 8) | avg;
+				image.setRGB(x, y, pixel);
+			}
+		}
+	}
 }

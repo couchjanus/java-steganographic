@@ -1,11 +1,14 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.ArrayList;
 
 public class Main extends JFrame
 implements ActionListener {
 	
     private JPanel mainPanel, leftPanel, rightPanel;
+    
+    ArrayList<String> imageList = new ArrayList<String>();
     
     DTPicture picture1, picture2, picture3;
     PictureTransferHandler picHandler;
@@ -14,7 +17,7 @@ implements ActionListener {
 		mainPanel = new JPanel(new BorderLayout());
 		mainPanel.setBackground(Color.RED);
 		mainPanel.setLayout(new GridLayout(1,2));
-		leftPanel = new TabbedPanelLeft();
+		leftPanel = new TabbedPanelLeft(imageList);
         rightPanel = new TabbedPanelRight();
 
         mainPanel.add(leftPanel, BorderLayout.LINE_START);
