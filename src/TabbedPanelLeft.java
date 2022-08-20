@@ -4,10 +4,14 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 import java.awt.*;
+import javax.swing.event.*;
+
 
 public class TabbedPanelLeft extends JPanel {
 	JTabbedPane tabbedPane = new JTabbedPane();
 	ArrayList<String> imageList;
+	
+	int index;
 	
 	public TabbedPanelLeft(ArrayList<String> imageList) {
 		super();
@@ -23,11 +27,20 @@ public class TabbedPanelLeft extends JPanel {
 		
 		String title = "New Picture 0";
 		tabbedPane.addTab(title, tabPicture);
-		int index = tabbedPane.indexOfTab(title);
+		index = tabbedPane.indexOfTab(title);
 		tabbedPane.setSelectedIndex(index);
 		
 		tabbedPane.setTabComponentAt(index, new ButtonTabComponent(tabbedPane));
 
+		
+		ChangeListener changeListener = new ChangeListener() {
+			public void stateChanged(ChangeEvent changeEvent) {
+				JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
+				index = sourceTabbedPane.getSelectedIndex();
+				System.out.println("Tabbed index: " + index);
+			}
+		};
+		tabbedPane.addChangeListener(changeListener);
 		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		
 		add(tabbedPane, BorderLayout.CENTER);
