@@ -1,12 +1,23 @@
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
-
+import java.io.File;
+import java.io.IOException;
+import java.io.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import static javax.swing.GroupLayout.Alignment.*;
+
+import com.tutego.jrtf.*;
+import static com.tutego.jrtf.Rtf.rtf;
+import static com.tutego.jrtf.RtfHeader.font;
+import static com.tutego.jrtf.RtfPara.*;
+import static com.tutego.jrtf.RtfText.*;
+import static com.tutego.jrtf.RtfUnit.CM;
+import java.awt.Desktop;
+import java.util.Date;
 
 public class TabbedPanelRight extends JPanel {
 	
@@ -45,6 +56,24 @@ public class TabbedPanelRight extends JPanel {
         return panel;
     }
 	
+	public static void makertf() throws IOException{
+		File out = new File("report.rtf");
+		RtfPara nextPar = RtfPara.p("second paragraph");
+		rtf()
+		.header(font(RtfHeaderFont.WINDINGS).at(1))
+		.section(p("Line 1: ", 2, bold(" Now: "), new Date(), text("dd"), text(true, "111", 2)), 
+				nextPar, row(bold("Hello World"), bold("Test"))
+				.bottomCellBorder().topCellBorder().cellSpace(1, CM)
+				)
+		.out(new FileWriter(out));
+		try {
+			Desktop.getDesktop().open(out);
+		}catch(IOException e) {
+			e.printStackTrace();
+		
+		}
+	}
+	
 	protected JComponent makePresetsPanel(String text) {
         JPanel panel = new JPanel(false);
         JLabel label = new JLabel(text);
@@ -57,9 +86,9 @@ public class TabbedPanelRight extends JPanel {
         JCheckBox lmbChackBox = new JCheckBox("LMB Preset");
         JCheckBox caseChackBox = new JCheckBox("Case Preset");
         
-        String[] generate = new String[] {"Create Report1", "Create Report2", "Create Report3"}; 
-        String[] prisets = new String[] {"All Prisets", "Custom Prisets", "Prisets 3"}; 
-        JComboBox<String> box = new JComboBox<>(generate);
+        String[] generate = new String[] {"Choose Reports Format", "Create RTF Report", "Create HTML Report"}; 
+        String[] prisets = new String[] {"Select a Group", "All Prisets", "Custom Prisets", "Prisets 3"}; 
+        JComboBox<String> reportBox = new JComboBox<>(generate);
         JComboBox<String> customBox = new JComboBox<>(prisets);
         
         layout.setAutoCreateGaps(true);
@@ -74,7 +103,7 @@ public class TabbedPanelRight extends JPanel {
         				.addComponent(rsChackBox)
         				.addComponent(lmbChackBox)
         				.addComponent(caseChackBox)
-        				.addComponent(box)
+        				.addComponent(reportBox)
         				)
         		
         		);
@@ -95,7 +124,7 @@ public class TabbedPanelRight extends JPanel {
         				.addComponent(caseChackBox)
         				)
         		.addGroup(layout.createParallelGroup(BASELINE)
-        				.addComponent(box)
+        				.addComponent(reportBox)
         				)
         		);
         
@@ -108,6 +137,64 @@ public class TabbedPanelRight extends JPanel {
         		}else {
         			System.out.println("It's deselected");
         		}
+        	}
+        });
+        
+        customBox.addActionListener(new ActionListener() {
+        	@Override
+        	public void actionPerformed(ActionEvent e) {
+        		int selectedIndex = customBox.getSelectedIndex();
+        		switch(selectedIndex) {
+        		case 0:
+        			break;
+        		case 1:
+        			chisChackBox.setSelected(true);
+        	        rsChackBox.setSelected(true);
+        	        lmbChackBox.setSelected(true);
+        	        caseChackBox.setSelected(true);
+        			break;
+        		case 2:
+        			chisChackBox.setSelected(false);
+        	        rsChackBox.setSelected(false);
+        	        lmbChackBox.setSelected(true);
+        	        caseChackBox.setSelected(true);
+        			break;
+        		case 3:
+        			chisChackBox.setSelected(true);
+        	        rsChackBox.setSelected(true);
+        	        lmbChackBox.setSelected(false);
+        	        caseChackBox.setSelected(false);
+        			break;
+        		default:
+        			System.out.println("Index: " + selectedIndex);
+        		}
+        		
+        	}
+        });
+        
+        reportBox.addActionListener(new ActionListener() {
+        	@Override
+        	public void actionPerformed(ActionEvent e) {
+        		int selectedIndex = customBox.getSelectedIndex();
+        		switch(selectedIndex) {
+        		case 0:
+        			break;
+        		case 1:
+        			System.out.println("Index: " + selectedIndex);
+        			try {
+        				makertf();
+        			}catch(IOException ex) {
+        				ex.printStackTrace();
+        			}
+        			break;
+        		case 2:
+        			System.out.println("Index: " + selectedIndex);
+        			break;
+        		
+        		default:
+        			System.out.println("Index: " + selectedIndex);
+        		}
+        		
         	}
         });
         return panel;
