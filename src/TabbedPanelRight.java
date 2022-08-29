@@ -18,6 +18,7 @@ import static com.tutego.jrtf.RtfText.*;
 import static com.tutego.jrtf.RtfUnit.CM;
 import java.awt.Desktop;
 import java.util.Date;
+import java.awt.image.*;
 
 public class TabbedPanelRight extends JPanel {
 	
@@ -134,6 +135,29 @@ public class TabbedPanelRight extends JPanel {
         	public void itemStateChanged(ItemEvent e) {
         		if(e.getStateChange() == ItemEvent.SELECTED) {
         			System.out.println("It's selected");
+        		}else {
+        			System.out.println("It's deselected");
+        		}
+        	}
+        });
+        
+        rsChackBox.addItemListener(new ItemListener() {
+        	@Override
+        	public void itemStateChanged(ItemEvent event) {
+        		if(event.getStateChange() == ItemEvent.SELECTED) {
+        			System.out.println("It's selected");
+        			
+        			int[] mask= {1, 0, 0, 1};
+        			int[] invert_mask = {-1, 0, 0, -1};
+        			
+        			BufferedImage image = ImageUtils.loadImage(imageList.get(TabbedPanelLeft.getIndex()));
+        			int [] RGB = ImageUtils.getSplitRGB(image, 100, 100);
+        			
+        			System.out.println(RGB[0]);
+        			
+        			ImageUtils.imgChannel(image, "red");
+        			ImageUtils.imgChannel(image, "green");
+        			ImageUtils.imgChannel(image, "blue");
         		}else {
         			System.out.println("It's deselected");
         		}
