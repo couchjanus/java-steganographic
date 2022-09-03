@@ -3,6 +3,9 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.util.ArrayList;
 
+//import org.apache.common.math3.stat.inference.*;
+//import org.apache.commons.math3.stat.inference.TestUtils;
+
 public class Main extends JFrame
 implements ActionListener {
 	
@@ -86,6 +89,11 @@ implements ActionListener {
 	 public static void main(String[] args) {
 	        //Schedule a job for the event dispatch thread:
 	        //creating and showing this application's GUI.
+		 	long[] o = {10, 9, 11};
+		 	double[] e = {10.1, 0.9, 10.3};
+		 	
+//		 	System.out.println(TestUtils.chiSquare(e, o));
+		 	
 	        SwingUtilities.invokeLater(new Runnable() {
 	            public void run() {
 	                //Turn off metal's use of bold fonts

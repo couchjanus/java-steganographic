@@ -8,6 +8,8 @@ import java.awt.image.*;
 import java.awt.color.ColorSpace;
 import java.util.Iterator;
 import java.io.*;
+import java.net.URLConnection;
+import java.net.FileNameMap;
 
 public class ImageUtils {
 	
@@ -134,4 +136,9 @@ public class ImageUtils {
     	return rgbs;
     }
     
+    public static String getMimeType(String file) throws java.io.IOException {
+    	FileNameMap fileName = URLConnection.getFileNameMap();
+    	String type = fileName.getContentTypeFor(file);
+    	return type;
+    }
 }

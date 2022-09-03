@@ -25,6 +25,10 @@ public class TabbedPanelRight extends JPanel {
 	JTabbedPane tabbedPane = new JTabbedPane();
 	ArrayList<String> imageList;
 	
+	private BufferedImage image = null;
+	private BufferedImage lsbImage = null;
+	private BufferedImage outImage = null;
+	
 	public TabbedPanelRight(ArrayList<String> imageList) {
 	  super();
 	  setLayout(new BorderLayout());
@@ -145,7 +149,38 @@ public class TabbedPanelRight extends JPanel {
         	@Override
         	public void itemStateChanged(ItemEvent event) {
         		if(event.getStateChange() == ItemEvent.SELECTED) {
-        			System.out.println("It's selected");
+        			
+        			String mime = null;
+        			
+        			
+        			try {
+        				mime = ImageUtils.getMimeType(imageList.get(TabbedPanelLeft.getIndex()));
+        				System.out.println("It's mime type " + mime);
+        			} catch(IOException ex) {}
+        			
+        			switch(mime) {
+        			case "image/bmp":
+        				
+        				try {
+        					image = BitmapLoader.loadBitmap(imageList.get(TabbedPanelLeft.getIndex()));
+        				}catch(IOException ex) {}
+        				lsbImage = new BufferedImage(image.getWidth(), image.getHeight(), 4);
+        				ChiSquareAttack attack = new ChiSquareAttack(image, lsbImage);
+        				
+        				outImage = attack.execute();
+        				
+        				break;
+        			case "image/jpeg":
+        				
+        				break;
+        			case "image/png":
+            				
+            			break;
+        			case "image/tif":
+            				
+            			break;
+        			}
+        			
         			
         			int[] mask= {1, 0, 0, 1};
         			int[] invert_mask = {-1, 0, 0, -1};
