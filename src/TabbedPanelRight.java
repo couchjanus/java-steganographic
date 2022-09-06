@@ -138,7 +138,15 @@ public class TabbedPanelRight extends JPanel {
         	@Override
         	public void itemStateChanged(ItemEvent e) {
         		if(e.getStateChange() == ItemEvent.SELECTED) {
-        			System.out.println("It's selected");
+//        			System.out.println("It's selected");
+        			try {
+        				BufferedImage image = ImageUtils.loadImage(imageList.get(TabbedPanelLeft.getIndex()));
+        				double[] chiSquareAttack = new ChiSquare(image).attackTopToBottom(1024);
+        				double q = 0;
+        				for(double v : chiSquareAttack)
+        					q += v;
+        				System.out.println("Chi square attack top to bottom = " + q);
+        			}catch(Exception ex) {}
         		}else {
         			System.out.println("It's deselected");
         		}

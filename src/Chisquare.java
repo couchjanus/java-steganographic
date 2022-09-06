@@ -1,64 +1,238 @@
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.image.BufferedImage;
+import java.awt.Color;
+import org.apache.commons.math3.stat.inference.ChiSquareTest;
 
-public class Chisquare {
+public class ChiSquare {
 	
-	public double[] calcColors(double[] histogram) {
-//	    Prepare color histogram for further calculations
-		double[] hist = new double[histogram.length];
-//		to avoid dividing by zero
-		for(int x = 0; x < histogram.length; x++) {
-			if(histogram[x] == 0) {
-				hist[x] = 1;
-			}else {
-				hist[x] = histogram[x];
+	private final BufferedImage image;
+	
+	private int numChunks = 0;
+	private double[] chiSquareValues;
+	private int width;
+	private int height;
+	private int[] values = new int[256];
+
+	public ChiSquare(BufferedImage image) {
+		this.image = image;
+		this.width = this.image.getWidth();
+		this.height = this.image.getHeight();
+	}
+	
+	private int[] getValues(int[] values) {
+		for(int i = 0; i < values.length; i++) {
+			values[i] = 1;
+		}
+		return values;
+	}
+	
+	private double[] getExpected(int[] values) {
+		double[] result = new double[values.length / 2];
+		for (int i = 0; i < result.length; i++) {
+			double avg = ((values[2 * i] + values[2 * i +1]) / 2L);
+			result[i] = avg;
+		}
+		return result;
+	}
+
+	private long[] getObserved(int[] values) {
+		long[] result = new long[values.length / 2];
+		for (int i = 0; i < result.length; i++) {	
+			result[i] = values[2 * i + 1];
+		}
+		return result;
+	}
+	
+	public double[] attackTopToBottom(int chunkSize) {
+		values = getValues(values);
+		this.numChunks = (int) (Math.floor((width * height * 3 / chunkSize)) + 1.0D);
+		this.chiSquareValues = new double[this.numChunks];
+		
+		int block = 0;
+		int nbBytes = 1;
+		int red, green, blue;
+		
+		for (int j = 0; j < height; j++) {
+			for(int i = 0; i < width; i++) {
+				
+				if(block < this.chiSquareValues.length) {
+					red = (new Color(image.getRGB(i, j))).getRed();
+					values[red]++;
+					nbBytes++;
+					if(nbBytes > chunkSize) {
+						this.chiSquareValues[block] = new ChiSquareTest().chiSquareTest(this.getExpected(values), this.getObserved(values));
+						block++;
+						nbBytes = 1;
+					}
+				}
+				if(block < this.chiSquareValues.length) {
+					green = (new Color(image.getRGB(i, j))).getGreen();
+					values[green]++;
+					nbBytes++;
+					if(nbBytes > chunkSize) {
+						this.chiSquareValues[block] = new ChiSquareTest().chiSquareTest(this.getExpected(values), this.getObserved(values));
+						block++;
+						nbBytes = 1;
+					}
+				}
+				
+				if(block < this.chiSquareValues.length) {
+					blue = (new Color(image.getRGB(i, j))).getBlue();
+					values[blue]++;
+					nbBytes++;
+					if(nbBytes > chunkSize) {
+						this.chiSquareValues[block] = new ChiSquareTest().chiSquareTest(this.getExpected(values), this.getObserved(values));
+						block++;
+						nbBytes = 1;
+					}
+				}
 			}
 		}
-		  
-	    return hist;
+		return this.chiSquareValues;
 	}
-
-	 public int[] expFreq(double[] histogram) {
-//		    Calculating expacted and observed freqs
-		    int[] expected = new int[histogram.length / 2];
-		    for(int k = 0; k < histogram.length / 2; k++) 
-		    	expected[k] = (int)(histogram[2 * k] + histogram[2 * k + 1]) / 2;
-		    return expected;
-	 }
-
-	public double[] obsFreq(double[] histogram) {
-	//    Calculating expacted and observed freqs
-	    double[] observed = new double[histogram.length / 2];
-	    for(int k = 0; k < histogram.length / 2; k++) 
-	    	observed[k] = histogram[2 * k];
-	    return observed;
+	
+	public double[] attackLeftToRigth(int chunkSize) {
+		values = getValues(values);
+		this.numChunks = (int) (Math.floor((width * height * 3 / chunkSize)) + 1.0D);
+		this.chiSquareValues = new double[this.numChunks];
+		
+		int block = 0;
+		int nbBytes = 1;
+		int red, green, blue;
+		
+		for(int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				
+				if(block < this.chiSquareValues.length) {
+					red = (new Color(image.getRGB(i, j))).getRed();
+					values[red]++;
+					nbBytes++;
+					if(nbBytes > chunkSize) {
+						this.chiSquareValues[block] = new ChiSquareTest().chiSquareTest(this.getExpected(values), this.getObserved(values));
+						block++;
+						nbBytes = 1;
+					}
+				}
+				if(block < this.chiSquareValues.length) {
+					green = (new Color(image.getRGB(i, j))).getGreen();
+					values[green]++;
+					nbBytes++;
+					if(nbBytes > chunkSize) {
+						this.chiSquareValues[block] = new ChiSquareTest().chiSquareTest(this.getExpected(values), this.getObserved(values));
+						block++;
+						nbBytes = 1;
+					}
+				}
+				
+				if(block < this.chiSquareValues.length) {
+					blue = (new Color(image.getRGB(i, j))).getBlue();
+					values[blue]++;
+					nbBytes++;
+					if(nbBytes > chunkSize) {
+						this.chiSquareValues[block] = new ChiSquareTest().chiSquareTest(this.getExpected(values), this.getObserved(values));
+						block++;
+						nbBytes = 1;
+					}
+				}
+			}
+		}
+		return this.chiSquareValues;
 	}
-
-	 // Обчисліть хі-квадрат
-    public static double calcChiSquare(double[] observed, int[] expected){
-    	
-    	Probability probability = new Probability();
-    	
-    	double[] e;
-    	double chisquare = 0.0;
-    	int k;
-    	e = new double[expected.length];
-
-    	for(k = 0; k < expected.length  ; k++){ 
-            // Кількість подій - це кількість елементів у expected[]
-    		if (k == 0)
-    			e[k]= 1000*(probability.normLowerDistribution(observed[k]));		//менша ймовірність
-    		else if(k == (expected.length-1))
-    			e[k]= 1000*(probability.normUpperDistribution(observed[k-1]));	//верхня ймовірність
-    		else
-    			e[k]= 1000*(probability.normLowerDistribution(observed[k]) - probability.normLowerDistribution(observed[k-1])) ;
-
-    		chisquare = chisquare +  (Math.pow((expected[k]-e[k]), 2)/e[k]);
-
-    	}
-    	return chisquare;
-    }
-
-
+	
+	public double[] attackBottomToTop(int chunkSize) {
+		values = getValues(values);
+		this.numChunks = (int) (Math.floor((width * height * 3 / chunkSize)) + 1.0D);
+		this.chiSquareValues = new double[this.numChunks];
+		
+		int block = 0;
+		int nbBytes = 1;
+		int red, green, blue;
+		
+		for (int j = height - 1; j >= 0; j--) {
+			for(int i = width -1; i >= 0; i--) {
+				
+				if(block < this.chiSquareValues.length) {
+					red = (new Color(image.getRGB(i, j))).getRed();
+					values[red]++;
+					nbBytes++;
+					if(nbBytes > chunkSize) {
+						this.chiSquareValues[block] = new ChiSquareTest().chiSquareTest(this.getExpected(values), this.getObserved(values));
+						block++;
+						nbBytes = 1;
+					}
+				}
+				if(block < this.chiSquareValues.length) {
+					green = (new Color(image.getRGB(i, j))).getGreen();
+					values[green]++;
+					nbBytes++;
+					if(nbBytes > chunkSize) {
+						this.chiSquareValues[block] = new ChiSquareTest().chiSquareTest(this.getExpected(values), this.getObserved(values));
+						block++;
+						nbBytes = 1;
+					}
+				}
+				
+				if(block < this.chiSquareValues.length) {
+					blue = (new Color(image.getRGB(i, j))).getBlue();
+					values[blue]++;
+					nbBytes++;
+					if(nbBytes > chunkSize) {
+						this.chiSquareValues[block] = new ChiSquareTest().chiSquareTest(this.getExpected(values), this.getObserved(values));
+						block++;
+						nbBytes = 1;
+					}
+				}
+			}
+		}
+		return this.chiSquareValues;
+	}
+	
+	public double[] attackRightToLeft(int chunkSize) {
+		values = getValues(values);
+		this.numChunks = (int) (Math.floor((width * height * 3 / chunkSize)) + 1.0D);
+		this.chiSquareValues = new double[this.numChunks];
+		
+		int block = 0;
+		int nbBytes = 1;
+		int red, green, blue;
+		
+		for (int i = width - 1; i >= 0; i--) {
+			for (int j = height - 1; j >= 0; j--) {
+				
+				if(block < this.chiSquareValues.length) {
+					red = (new Color(image.getRGB(i, j))).getRed();
+					values[red]++;
+					nbBytes++;
+					if(nbBytes > chunkSize) {
+						this.chiSquareValues[block] = new ChiSquareTest().chiSquareTest(this.getExpected(values), this.getObserved(values));
+						block++;
+						nbBytes = 1;
+					}
+				}
+				if(block < this.chiSquareValues.length) {
+					green = (new Color(image.getRGB(i, j))).getGreen();
+					values[green]++;
+					nbBytes++;
+					if(nbBytes > chunkSize) {
+						this.chiSquareValues[block] = new ChiSquareTest().chiSquareTest(this.getExpected(values), this.getObserved(values));
+						block++;
+						nbBytes = 1;
+					}
+				}
+				
+				if(block < this.chiSquareValues.length) {
+					blue = (new Color(image.getRGB(i, j))).getBlue();
+					values[blue]++;
+					nbBytes++;
+					if(nbBytes > chunkSize) {
+						this.chiSquareValues[block] = new ChiSquareTest().chiSquareTest(this.getExpected(values), this.getObserved(values));
+						block++;
+						nbBytes = 1;
+					}
+				}
+			}
+		}
+		return this.chiSquareValues;
+	}
+	
+	
 }
