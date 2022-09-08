@@ -87,6 +87,7 @@ public class TabbedPanelRight extends JPanel {
         panel.setLayout(layout);
         
         JCheckBox chisChackBox = new JCheckBox("Chi Squared");
+        JCheckBox spChackBox = new JCheckBox("Simple Pair");
         JCheckBox rsChackBox = new JCheckBox("Rs Preset");
         JCheckBox lmbChackBox = new JCheckBox("LMB Preset");
         JCheckBox caseChackBox = new JCheckBox("Case Preset");
@@ -105,6 +106,7 @@ public class TabbedPanelRight extends JPanel {
         		.addComponent(customBox)
         		
         				.addComponent(chisChackBox)
+        				.addComponent(spChackBox)
         				.addComponent(rsChackBox)
         				.addComponent(lmbChackBox)
         				.addComponent(caseChackBox)
@@ -121,6 +123,8 @@ public class TabbedPanelRight extends JPanel {
         	
             .addGroup(layout.createParallelGroup(LEADING)
         				.addComponent(chisChackBox))
+            .addGroup(layout.createParallelGroup(LEADING)
+    				.addComponent(spChackBox))
         	.addGroup(layout.createParallelGroup(LEADING)
         				.addComponent(rsChackBox))
         	.addGroup(layout.createParallelGroup(LEADING)
@@ -152,6 +156,34 @@ public class TabbedPanelRight extends JPanel {
         		}
         	}
         });
+        
+        spChackBox.addItemListener(new ItemListener() {
+        	@Override
+        	public void itemStateChanged(ItemEvent e) {
+        		if(e.getStateChange() == ItemEvent.SELECTED) {
+//        			System.out.println("It's selected");
+        			try {
+        				BufferedImage image = ImageUtils.loadImage(imageList.get(TabbedPanelLeft.getIndex()));
+        				SimplePair sp = new SimplePair(image);
+        				double avg = 0;
+        				double result = sp.analysis(0);
+        				System.out.println("Stegano into Red = " + result);
+        				avg += result;
+        				result = sp.analysis(1);
+        				System.out.println("Stegano into Green = " + result);
+        				avg += result;
+        				result = sp.analysis(2);
+        				System.out.println("Stegano into Blue = " + result);
+        				avg += result;
+        				System.out.println("Average = " + avg/3);
+        				
+        			}catch(Exception ex) {}
+        		}else {
+        			System.out.println("It's deselected");
+        		}
+        	}
+        });
+        
         
         rsChackBox.addItemListener(new ItemListener() {
         	@Override
