@@ -87,9 +87,9 @@ public class TabbedPanelRight extends JPanel {
         panel.setLayout(layout);
         
         JCheckBox chisChackBox = new JCheckBox("Chi Squared");
-        JCheckBox spChackBox = new JCheckBox("Simple Pair");
+        JCheckBox spChackBox = new JCheckBox("Detect LSB SPA");
         JCheckBox rsChackBox = new JCheckBox("Rs Preset");
-        JCheckBox lmbChackBox = new JCheckBox("LMB Preset");
+        JCheckBox aspChackBox = new JCheckBox("Simple PAir");
         JCheckBox caseChackBox = new JCheckBox("Case Preset");
         
         String[] generate = new String[] {"Choose Reports Format", "Create RTF Report", "Create HTML Report"}; 
@@ -108,7 +108,7 @@ public class TabbedPanelRight extends JPanel {
         				.addComponent(chisChackBox)
         				.addComponent(spChackBox)
         				.addComponent(rsChackBox)
-        				.addComponent(lmbChackBox)
+        				.addComponent(aspChackBox)
         				.addComponent(caseChackBox)
         				.addComponent(reportBox)
         				)
@@ -128,7 +128,7 @@ public class TabbedPanelRight extends JPanel {
         	.addGroup(layout.createParallelGroup(LEADING)
         				.addComponent(rsChackBox))
         	.addGroup(layout.createParallelGroup(LEADING)
-        				.addComponent(lmbChackBox))
+        				.addComponent(aspChackBox))
         	.addGroup(layout.createParallelGroup(LEADING)
         				.addComponent(caseChackBox)
         				)
@@ -157,6 +157,37 @@ public class TabbedPanelRight extends JPanel {
         	}
         });
         
+        
+        aspChackBox.addItemListener(new ItemListener() {
+        	@Override
+        	public void itemStateChanged(ItemEvent e) {
+        		if(e.getStateChange() == ItemEvent.SELECTED) {
+        			System.out.println("Siple Pair Detected selected");
+        			double [] results;
+        			double avg = 0;
+        			try {
+        				BufferedImage image = ImageUtils.loadImage(imageList.get(TabbedPanelLeft.getIndex()));
+        				SPA sp = new SPA(image);
+        				results = sp.analysis();
+        				String [] channels = {"Red", "Green", "Blue"};
+        				
+        				for (int i = 0; i < 3; i++) {
+        					avg += results[i];
+        					if(results[i] > 0)
+        						System.out.println("The " + channels[i] + " channel has the steganorgam: " + results[i]);
+        					else
+        						System.out.println("The " + channels[i] + " channel doesn't have the steganorgam");
+        					
+        				}
+        				
+        				System.out.println("Average = " + avg/3);
+        				
+        			}catch(Exception ex) {}
+        		}else {
+        			System.out.println("It's deselected");
+        		}
+        	}
+        });
         spChackBox.addItemListener(new ItemListener() {
         	@Override
         	public void itemStateChanged(ItemEvent e) {
@@ -249,19 +280,19 @@ public class TabbedPanelRight extends JPanel {
         		case 1:
         			chisChackBox.setSelected(true);
         	        rsChackBox.setSelected(true);
-        	        lmbChackBox.setSelected(true);
+        	        aspChackBox.setSelected(true);
         	        caseChackBox.setSelected(true);
         			break;
         		case 2:
         			chisChackBox.setSelected(false);
         	        rsChackBox.setSelected(false);
-        	        lmbChackBox.setSelected(true);
+        	        aspChackBox.setSelected(true);
         	        caseChackBox.setSelected(true);
         			break;
         		case 3:
         			chisChackBox.setSelected(true);
         	        rsChackBox.setSelected(true);
-        	        lmbChackBox.setSelected(false);
+        	        aspChackBox.setSelected(false);
         	        caseChackBox.setSelected(false);
         			break;
         		default:
