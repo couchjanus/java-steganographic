@@ -221,49 +221,68 @@ public class TabbedPanelRight extends JPanel {
         	public void itemStateChanged(ItemEvent event) {
         		if(event.getStateChange() == ItemEvent.SELECTED) {
         			
-        			String mime = null;
-        			
-        			
         			try {
-        				mime = ImageUtils.getMimeType(imageList.get(TabbedPanelLeft.getIndex()));
-        				System.out.println("It's mime type " + mime);
-        			} catch(IOException ex) {}
-        			
-        			switch(mime) {
-        			case "image/bmp":
+        				BufferedImage image = ImageUtils.loadImage(imageList.get(TabbedPanelLeft.getIndex()));
+        				RSA rsa = new RSA(image);
+        				double avg = 0;
+        				double[] result = rsa.analysis(0, true);
         				
-        				try {
-        					image = BitmapLoader.loadBitmap(imageList.get(TabbedPanelLeft.getIndex()));
-        				}catch(IOException ex) {}
-        				lsbImage = new BufferedImage(image.getWidth(), image.getHeight(), 4);
-        				ChiSquareAttack attack = new ChiSquareAttack(image, lsbImage);
+        				System.out.println("RSA into Red = " + result[0]);
+        				System.out.println("RSA into Red = " + result[1]);
+//        				avg += result;
+//        				result = sp.analysis(1);
+//        				System.out.println("Stegano into Green = " + result);
+//        				avg += result;
+//        				result = sp.analysis(2);
+//        				System.out.println("Stegano into Blue = " + result);
+//        				avg += result;
+//        				System.out.println("Average = " + avg/3);
         				
-        				outImage = attack.execute();
-        				
-        				break;
-        			case "image/jpeg":
-        				
-        				break;
-        			case "image/png":
-            				
-            			break;
-        			case "image/tif":
-            				
-            			break;
-        			}
+        			}catch(Exception ex) {}
         			
-        			
-        			int[] mask= {1, 0, 0, 1};
-        			int[] invert_mask = {-1, 0, 0, -1};
-        			
-        			BufferedImage image = ImageUtils.loadImage(imageList.get(TabbedPanelLeft.getIndex()));
-        			int [] RGB = ImageUtils.getSplitRGB(image, 100, 100);
-        			
-        			System.out.println(RGB[0]);
-        			
-        			ImageUtils.imgChannel(image, "red");
-        			ImageUtils.imgChannel(image, "green");
-        			ImageUtils.imgChannel(image, "blue");
+//        			String mime = null;
+//        			
+//        			
+//        			try {
+//        				mime = ImageUtils.getMimeType(imageList.get(TabbedPanelLeft.getIndex()));
+//        				System.out.println("It's mime type " + mime);
+//        			} catch(IOException ex) {}
+//        			
+//        			switch(mime) {
+//        			case "image/bmp":
+//        				
+//        				try {
+//        					image = BitmapLoader.loadBitmap(imageList.get(TabbedPanelLeft.getIndex()));
+//        				}catch(IOException ex) {}
+//        				lsbImage = new BufferedImage(image.getWidth(), image.getHeight(), 4);
+//        				ChiSquareAttack attack = new ChiSquareAttack(image, lsbImage);
+//        				
+//        				outImage = attack.execute();
+//        				
+//        				break;
+//        			case "image/jpeg":
+//        				
+//        				break;
+//        			case "image/png":
+//            				
+//            			break;
+//        			case "image/tif":
+//            				
+//            			break;
+//        			}
+//        			
+//        			
+//        			int[] mask= {1, 0, 0, 1};
+//        			int[] invert_mask = {-1, 0, 0, -1};
+//        			
+//        			BufferedImage image = ImageUtils.loadImage(imageList.get(TabbedPanelLeft.getIndex()));
+//        			int [] RGB = ImageUtils.getSplitRGB(image, 100, 100);
+//        			
+//        			System.out.println(RGB[0]);
+//        			
+//        			ImageUtils.imgChannel(image, "red");
+//        			ImageUtils.imgChannel(image, "green");
+//        			ImageUtils.imgChannel(image, "blue");
         		}else {
         			System.out.println("It's deselected");
         		}
