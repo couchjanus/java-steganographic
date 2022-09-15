@@ -19,6 +19,8 @@ import static com.tutego.jrtf.RtfUnit.CM;
 import java.awt.Desktop;
 import java.util.Date;
 import java.awt.image.*;
+import org.math.plot.Plot2DPanel;
+import org.math.plot.plotObjects.BaseLabel;
 
 public class TabbedPanelRight extends JPanel {
 	
@@ -28,6 +30,7 @@ public class TabbedPanelRight extends JPanel {
 	private BufferedImage image = null;
 	private BufferedImage lsbImage = null;
 	private BufferedImage outImage = null;
+	private Plot2DPanel chiSquarePanel;
 	
 	public TabbedPanelRight(ArrayList<String> imageList) {
 	  super();
@@ -47,6 +50,9 @@ public class TabbedPanelRight extends JPanel {
       tabbedPane.addTab("Histogram", null, panel2,
               "Does Histogram as much nothing");
       tabbedPane.setMnemonicAt(1, KeyEvent.VK_2);
+      
+      chiSquarePanel = new Plot2DPanel();
+      tabbedPane.addTab("Chi-squere", null, chiSquarePanel, null);
        
       tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
       
@@ -144,8 +150,32 @@ public class TabbedPanelRight extends JPanel {
         		if(e.getStateChange() == ItemEvent.SELECTED) {
 //        			System.out.println("It's selected");
         			try {
+        				int chunkSize = 2048;
+        				
         				BufferedImage image = ImageUtils.loadImage(imageList.get(TabbedPanelLeft.getIndex()));
-        				double[] chiSquareAttack = new ChiSquare(image).attackTopToBottom(1024);
+        				
+        				int numChunks = (int) (Math.floor((image.getWidth() * image.getHeight() * 3 / chunkSize)) + 1.0D);
+        				
+        				double [] x = new double[numChunks];
+        				
+        				for(int i = 0; i < numChunks; i++) {
+        					x[i] = i;
+        				}
+        				
+        				double[] chiSquareAttack = new ChiSquare(image).attackTopToBottom(chunkSize);
+        				double[] avarege = new AvarageLsb(image).attackTopToBottom(chunkSize);
+        				
+        				chiSquarePanel.removeAllPlots(); 
+        				chiSquarePanel.addScatterPlot("Avarage LSB", x, avarege);
+        				BaseLabel title = new BaseLabel("Chi Squere And Avarege LSB", null, 0.5, 1.1);
+        				title.setFont(new Font("Courier", Font.BOLD, 20));
+        				
+        				chiSquarePanel.addPlotable(title);
+        				chiSquarePanel.addLinePlot("Chi-Squere", x, chiSquareAttack);
+        				chiSquarePanel.addLegend("EAST");
+        				chiSquarePanel.setAxisLabel(0, chunkSize+"-bytes data block");
+        				chiSquarePanel.setAxisLabel(1, "Avarage LSB value CHi-Squere test");
+        				
         				double q = 0;
         				for(double v : chiSquareAttack)
         					q += v;

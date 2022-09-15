@@ -10,7 +10,7 @@ public class ChiSquare {
 	private double[] chiSquareValues;
 	private int width;
 	private int height;
-	private int[] values = new int[256];
+	private int[] values;
 
 	public ChiSquare(BufferedImage image) {
 		this.image = image;
@@ -43,8 +43,11 @@ public class ChiSquare {
 	}
 	
 	public double[] attackTopToBottom(int chunkSize) {
-		values = getValues(values);
+		
 		this.numChunks = (int) (Math.floor((width * height * 3 / chunkSize)) + 1.0D);
+		values = new int[numChunks];
+		values = getValues(values);
+		
 		this.chiSquareValues = new double[this.numChunks];
 		
 		int block = 0;
