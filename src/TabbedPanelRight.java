@@ -32,6 +32,9 @@ public class TabbedPanelRight extends JPanel {
 	private BufferedImage outImage = null;
 	private Plot2DPanel chiSquarePanel;
 	
+	private int chunkSize = 1024;
+	private int chiDirection = 1;
+	
 	public TabbedPanelRight(ArrayList<String> imageList) {
 	  super();
 	  setLayout(new BorderLayout());
@@ -40,6 +43,10 @@ public class TabbedPanelRight extends JPanel {
 	  RightToolbar toolBar = new RightToolbar(tabbedPane, imageList);
 	  
 	  add(toolBar, BorderLayout.PAGE_START);
+	  
+	  JComponent advancePanel = makeConfigPanel("Coose size chunk: ");
+      tabbedPane.addTab("Congigs", null, advancePanel,
+              "Does nothing");
 	  
       JComponent panel1 = makePresetsPanel("Check Some Presets: ");
       tabbedPane.addTab("Presets", null, panel1,
@@ -83,6 +90,119 @@ public class TabbedPanelRight extends JPanel {
 			e.printStackTrace();
 		
 		}
+	}
+	
+	private JComponent makeConfigPanel(String text) {
+		JPanel panel = new JPanel(false);
+        JLabel label = new JLabel(text);
+        
+        
+        GroupLayout layout = new GroupLayout(panel);
+        panel.setLayout(layout);
+        
+        layout.setAutoCreateGaps(true);
+        layout.setAutoCreateContainerGaps(true);
+        
+        ButtonGroup group = new ButtonGroup();
+        
+        JRadioButton rb1 = new JRadioButton("Top To Bottom", true);
+        JRadioButton rb2 = new JRadioButton("Left To Right");
+        JRadioButton rb3 = new JRadioButton("Right To Left");
+        JRadioButton rb4 = new JRadioButton("Bottom To Top");
+        group.add(rb1);
+        group.add(rb2);
+        group.add(rb3);
+        group.add(rb4);
+        
+        
+        rb1.addActionListener(new ActionListener() {
+        	@Override
+        	public void actionPerformed(ActionEvent ev) {
+        		chiDirection = 1;
+        		System.out.println("chiDirection = "+chiDirection);
+        		
+        	}
+        });
+        
+        rb2.addActionListener(new ActionListener() {
+        	@Override
+        	public void actionPerformed(ActionEvent ev) {
+        		chiDirection = 2;
+        		System.out.println("chiDirection = "+chiDirection);
+        		
+        	}
+        });
+        
+        rb3.addActionListener(new ActionListener() {
+        	@Override
+        	public void actionPerformed(ActionEvent ev) {
+        		chiDirection = 3;
+        		System.out.println("chiDirection = "+chiDirection);
+        		
+        	}
+        });
+        rb4.addActionListener(new ActionListener() {
+        	@Override
+        	public void actionPerformed(ActionEvent ev) {
+        		chiDirection = 4;
+        		System.out.println("chiDirection = "+chiDirection);
+        		
+        	}
+        });
+        
+        String [] sizes = new String[] {"128", "512", "1024", "2048"};
+        
+        JComboBox<String> sizeField = new JComboBox(sizes);
+        
+        JLabel sizeLabel = new JLabel("Size Chunk:");
+        
+        JLabel directionLabel = new JLabel("Direcrion:");
+        
+        layout.setHorizontalGroup(layout.createSequentialGroup()
+        		.addComponent(sizeLabel)
+        		.addGroup(layout.createParallelGroup(LEADING)
+        				.addComponent(sizeField)
+        		.addGroup(layout.createParallelGroup(LEADING)
+        				.addComponent(directionLabel))
+        		.addGroup(layout.createParallelGroup(LEADING)
+        				.addGroup(layout.createSequentialGroup()
+        						.addGroup(layout.createParallelGroup(LEADING)
+        								.addComponent(rb1)	
+        								.addComponent(rb4))
+        						.addGroup(layout.createParallelGroup(LEADING)
+                						.addComponent(rb2)	
+                						.addComponent(rb3))
+        				)))
+        		);
+        
+        layout.setVerticalGroup(layout.createSequentialGroup()
+        		.addGroup(layout.createParallelGroup(BASELINE)
+        				.addComponent(sizeLabel)
+        				.addComponent(sizeField))
+        		.addGroup(layout.createParallelGroup(LEADING)
+        				.addComponent(directionLabel))
+        		.addGroup(layout.createSequentialGroup()
+						.addGroup(layout.createParallelGroup(BASELINE)
+								.addComponent(rb1)	
+								.addComponent(rb2))
+						.addGroup(layout.createParallelGroup(BASELINE)
+        						.addComponent(rb4)	
+        						.addComponent(rb3)))
+        		);
+        
+        
+        sizeField.addActionListener(new ActionListener() {
+        	@Override
+        	public void actionPerformed(ActionEvent event) {
+        		int selectedIndex = (int) sizeField.getSelectedIndex();
+        		chunkSize = Integer.parseInt(sizeField.getSelectedItem().toString());
+        		System.out.println("chunkSize = " + chunkSize);
+        		
+        	}
+        });
+        
+        
+        return panel;
 	}
 	
 	protected JComponent makePresetsPanel(String text) {
@@ -150,7 +270,7 @@ public class TabbedPanelRight extends JPanel {
         		if(e.getStateChange() == ItemEvent.SELECTED) {
 //        			System.out.println("It's selected");
         			try {
-        				int chunkSize = 2048;
+//        				int chunkSize = 2048;
         				
         				BufferedImage image = ImageUtils.loadImage(imageList.get(TabbedPanelLeft.getIndex()));
         				
@@ -161,10 +281,34 @@ public class TabbedPanelRight extends JPanel {
         				for(int i = 0; i < numChunks; i++) {
         					x[i] = i;
         				}
+        				double[] chiSquareAttack = new double[numChunks];
+        				double[] avarege = new double[numChunks];
         				
-        				double[] chiSquareAttack = new ChiSquare(image).attackTopToBottom(chunkSize);
-        				double[] avarege = new AvarageLsb(image).attackTopToBottom(chunkSize);
+        				System.out.println("chiDirection = "+chiDirection+" chunkSize = "+ chunkSize );
         				
+        				switch(chiDirection) {
+        				case 1:
+        					chiSquareAttack = new ChiSquare(image).attackTopToBottom(chunkSize);
+            				avarege = new AvarageLsb(image).attackTopToBottom(chunkSize);
+        					break;
+        				case 2:
+        					chiSquareAttack = new ChiSquare(image).attackLeftToRigth(chunkSize);
+            				avarege = new AvarageLsb(image).attackLeftToRight(chunkSize);
+        					break;
+        				case 3:
+        					chiSquareAttack = new ChiSquare(image).attackRightToLeft(chunkSize);
+            				avarege = new AvarageLsb(image).attackRightToLeft(chunkSize);
+        					break;
+        				case 4:
+        					break;
+//        				default:
+//        					chiSquareAttack = new ChiSquare(image).attackBottomToTop(chunkSize);
+//            				avarege = new AvarageLsb(image).attackBottomToTop(chunkSize);
+            				
+        				}
+//        				double[] chiSquareAttack = new ChiSquare(image).attackTopToBottom(chunkSize);
+//        				double[] avarege = new AvarageLsb(image).attackTopToBottom(chunkSize);
+//        				
         				chiSquarePanel.removeAllPlots(); 
         				chiSquarePanel.addScatterPlot("Avarage LSB", x, avarege);
         				BaseLabel title = new BaseLabel("Chi Squere And Avarege LSB", null, 0.5, 1.1);
