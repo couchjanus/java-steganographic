@@ -75,7 +75,7 @@ implements ActionListener {
 	        //Create and set up the window.
 	        Main frame = new Main();
 	        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	        frame.setPreferredSize(new Dimension(800, 400));
+	        frame.setPreferredSize(new Dimension(800, 700));
 	        
 
 	        //Add content to the window.
