@@ -19,6 +19,8 @@ public class PicturePanel extends JPanel {
     Point startDrag, endDrag;
     private Shape shape = null;
     
+    private ScrollPanel scrollPanel;
+    
 	public PicturePanel(ArrayList<String> imageList) {
 		super();
 		this.imageList = imageList;
@@ -26,47 +28,52 @@ public class PicturePanel extends JPanel {
 		setLayout(new GridLayout(2,1));
 		
 //		setLayout(new BorderLayout());
-		addPictureControls();
+//		addPictureControls();
 //		addControls();
-		add(imageAreaPanel);
+//		add(imageAreaPanel);
+		
+		
 		
 		SelectedRegion selectedAreaPanel = new SelectedRegion();
 		
 		selectedAreaPanel.setLayout(new BorderLayout());
-//		selectedAreaPanel.setBackground(Color.red);
+		selectedAreaPanel.setBackground(Color.red);
+		scrollPanel = new ScrollPanel(imageList, selectedAreaPanel);
+		
+		add(scrollPanel);
 		add(selectedAreaPanel);
 	
 	
-	imageAreaPanel.addMouseListener(new MouseAdapter() {
-		public void mousePressed(MouseEvent e) {
-			startDrag = new Point(e.getX(), e.getY());
-			endDrag = startDrag;
-			repaint();
-		}
-		public void mouseReleased(MouseEvent e) {
-			if (endDrag!=null && startDrag!=null) {
-				try {
-					shape = makeRectangle(startDrag.x, startDrag.y, e.getX(), e.getY());
-					System.out.println("Rect: ("+startDrag.x +"," + startDrag.y+") ("+(e.getX()-startDrag.x) +","+ (e.getY()-startDrag.y)+")");
-					selectedAreaPanel.updateSelectedRegion(image.getSubimage(startDrag.x, startDrag.y, e.getX()-startDrag.x, e.getY()-startDrag.y));
-					startDrag = null;
-					endDrag = null;
-					imageAreaPanel.repaint();
-				}catch(Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-		}
-		
+//		scrollPanel.addMouseListener(new MouseAdapter() {
+//		public void mousePressed(MouseEvent e) {
+//			startDrag = new Point(e.getX(), e.getY());
+//			endDrag = startDrag;
+//			repaint();
+//		}
+//		public void mouseReleased(MouseEvent e) {
+//			if (endDrag!=null && startDrag!=null) {
+//				try {
+//					shape = makeRectangle(startDrag.x, startDrag.y, e.getX(), e.getY());
+//					System.out.println("Rect: ("+startDrag.x +"," + startDrag.y+") ("+(e.getX()-startDrag.x) +","+ (e.getY()-startDrag.y)+")");
+//					selectedAreaPanel.updateSelectedRegion(image.getSubimage(startDrag.x, startDrag.y, e.getX()-startDrag.x, e.getY()-startDrag.y));
+//					startDrag = null;
+//					endDrag = null;
+//					imageAreaPanel.repaint();
+//				}catch(Exception ex) {
+//					ex.printStackTrace();
+//				}
+//			}
+//		}
+//		
+//	
+//	});
 	
-	});
-	
-	imageAreaPanel.addMouseMotionListener(new MouseMotionAdapter() {
-		public void mouseDragged(MouseEvent e) {
-			endDrag = new Point(e.getX(), e.getY());
-			repaint();
-		}
-	});
+//		scrollPanel.addMouseMotionListener(new MouseMotionAdapter() {
+//		public void mouseDragged(MouseEvent e) {
+//			endDrag = new Point(e.getX(), e.getY());
+//			repaint();
+//		}
+//	});
 	
 	}
 	private Rectangle2D.Float makeRectangle(int x1, int y1, int x2, int y2){
