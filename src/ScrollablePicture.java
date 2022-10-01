@@ -11,17 +11,24 @@ import javax.swing.border.*;
 public class ScrollablePicture extends JLabel
                                implements Scrollable,
                                           MouseMotionListener {
-
+	static final long serialVersionUID = -1L;
+	
     private int maxUnitIncrement = 1;
     private boolean missingPicture = false;
     
     Point startDrag, endDrag;
     private Shape shape = null;
+    
     private SelectedRegion selectedRegion;
-
+    private BufferedImage image;
+    private String path;
+    
     public ScrollablePicture(ImageIcon i, int m, SelectedRegion selectedRegion, String path) {
         super(i);
         this.selectedRegion = selectedRegion;
+        this.path = path;
+        this.image = ImageUtils.loadImage(this.path);
+        
         if (i == null) {
             missingPicture = true;
             setText("No picture found.");
@@ -44,9 +51,11 @@ public class ScrollablePicture extends JLabel
         		if (endDrag!=null && startDrag!=null) {
         			try {
         				shape = makeRectangle(startDrag.x, startDrag.y, e.getX(), e.getY());
+        				
         				System.out.println("Rect: ("+startDrag.x +"," + startDrag.y+") ("+(e.getX()-startDrag.x) +","+ (e.getY()-startDrag.y)+")");
         				
-        				BufferedImage image = ImageUtils.loadImage(path);
+        				System.out.println("Rect: ("+startDrag.x +"," + startDrag.y+") ("+(endDrag.x) +","+ (endDrag.y)+")");
+        				
         				selectedRegion.updateSelectedRegion(image.getSubimage(startDrag.x, startDrag.y, e.getX()-startDrag.x, e.getY()-startDrag.y));
         				startDrag = null;
         				endDrag = null;
@@ -86,7 +95,7 @@ public class ScrollablePicture extends JLabel
     }
     
     private Rectangle2D.Float makeRectangle(int x1, int y1, int x2, int y2){
-		return new Rectangle2D.Float(Math.min(x2, x2), Math.min(y1, y2), Math.abs(x1-x2), Math.abs(y1-y2));
+		return new Rectangle2D.Float(Math.min(x1, x2), Math.min(y1, y2), Math.abs(x1-x2), Math.abs(y1-y2));
 	}
 
     public int getScrollableUnitIncrement(Rectangle visibleRect,
@@ -135,4 +144,31 @@ public class ScrollablePicture extends JLabel
     public void setMaxUnitIncrement(int pixels) {
         maxUnitIncrement = pixels;
     }
+    
+    protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Graphics2D g2 = (Graphics2D) g;
+		
+		if (image != null) {
+			g2.drawImage(image, 0, 0, null);
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			
+			g2.setStroke(new BasicStroke(2));
+			g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.50f));
+			
+			if (shape != null) {
+				g2.setPaint(Color.BLACK);
+				g2.draw(shape);
+				
+				g2.setPaint(Color.YELLOW);
+				g2.fill(shape);
+			}
+			
+			if(startDrag != null && endDrag != null) {
+				g2.setPaint(Color.LIGHT_GRAY);
+				Shape r = makeRectangle(startDrag.x, startDrag.y, endDrag.x, endDrag.y);
+				g2.draw(r);
+			}
+		}
+	}
 }

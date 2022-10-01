@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class ScrollPanel extends JPanel
 implements ItemListener{
-	
+	static final long serialVersionUID = -1L;
 	private Rule columnView;
     private Rule rowView;
     private JToggleButton isMetric;
@@ -20,6 +20,9 @@ implements ItemListener{
     ArrayList<String> imageList;
     
     private SelectedRegion selectedRegion;
+    
+    private JFileChooser fc;
+    static final private String ATTACH = "attach";
     
 	public ScrollPanel(ArrayList<String> imageList, SelectedRegion selectedRegion) {
 		this.imageList = imageList;
@@ -42,10 +45,17 @@ implements ItemListener{
         buttonCorner.add(isMetric); 
         
         
+        JPanel boundPanel = new JPanel();
+        
+        boundPanel.setBorder(BorderFactory.createTitledBorder("Choose the File"));
+        BoxLayout layout2 = new BoxLayout(boundPanel, BoxLayout.Y_AXIS);
+        boundPanel.setLayout(layout2);
+        
         JLabel label = new JLabel("<html><h1>Drag Abd Drop File HERE</h1><br><br><h2>Or Click Brouse Button</h2><br><br></html>");
         Border border = BorderFactory.createLineBorder(Color.RED);
 		label.setBorder(border);
 		label.setBounds(getVisibleRect());
+		label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		new FileDrop(System.out, label, new FileDrop.Listener() {
 			@Override
@@ -61,9 +71,7 @@ implements ItemListener{
 			            rowView.setPreferredHeight(480);
 			        }
 					
-					
 					imageList.add(files[0].getCanonicalPath());
-//    				System.out.println(imageList);
 					
 					 //Set up the scroll pane.
 			        picture = new ScrollablePicture(imageIcon, columnView.getIncrement(), selectedRegion, files[0].getCanonicalPath());
@@ -76,17 +84,12 @@ implements ItemListener{
 			        pictureScrollPane.setRowHeaderView(rowView);
 
 				//Set the corners.
-			        //In theory, to support internationalization you would change
-			        //UPPER_LEFT_CORNER to UPPER_LEADING_CORNER,
-			        //LOWER_LEFT_CORNER to LOWER_LEADING_CORNER, and
-			        //UPPER_RIGHT_CORNER to UPPER_TRAILING_CORNER.  In practice,
-			        //bug #4467063 makes that impossible (in 1.4, at least).
+			        
 			        pictureScrollPane.setCorner(JScrollPane.UPPER_LEFT_CORNER,
 			                                    buttonCorner);
 			        pictureScrollPane.setCorner(JScrollPane.LOWER_LEFT_CORNER,
 			                                    new Corner());
-			        pictureScrollPane.setCorner(JScrollPane.UPPER_RIGHT_CORNER,
-			                                    new Corner());
+			        pictureScrollPane.setCorner(JScrollPane.UPPER_RIGHT_CORNER, new Corner());
 			        removeAll();
 
 			        //Put it in this panel.
@@ -96,19 +99,81 @@ implements ItemListener{
 				}catch(java.io.IOException e) {
 					
 				}
-				
 			}
 		});
 		
-		add(label, BorderLayout.CENTER);
+		boundPanel.add(label);
 		
+		JButton brouseButton = new JButton("Bouse Image File");
+		brouseButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		brouseButton.setActionCommand(ATTACH);
+		brouseButton.setToolTipText("Open file");
+		
+		brouseButton.addActionListener(new ActionListener() {
+       	 @Override
+       	 public void actionPerformed(ActionEvent e) {
+       		String cmd = e.getActionCommand();
+       			
+       		if (ATTACH.equals(cmd)) {
+       	        if (fc == null) {
+       	            fc = new JFileChooser();
+       	            fc.addChoosableFileFilter(new ImageFilter());
+       	            fc.setAcceptAllFileFilterUsed(false);
+       	            fc.setFileView(new ImageFileView());
+       	            fc.setAccessory(new ImagePreview(fc));
+       	        }
+       	        int returnVal = fc.showDialog(ScrollPanel.this,
+       	                "Attach");
+       			if (returnVal == JFileChooser.APPROVE_OPTION) 
+       			{
+       				File file = fc.getSelectedFile();
+       				
+       				imageIcon = createImageIcon(file.getPath().toString());
+					
+					if (imageIcon != null) {
+			            columnView.setPreferredWidth(imageIcon.getIconWidth());
+			            rowView.setPreferredHeight(imageIcon.getIconHeight());
+			        } else {
+			            columnView.setPreferredWidth(320);
+			            rowView.setPreferredHeight(480);
+			        }
+					
+					picture = new ScrollablePicture(imageIcon, columnView.getIncrement(), selectedRegion, file.getPath().toString());
+			        JScrollPane pictureScrollPane = new JScrollPane(picture);
+			        pictureScrollPane.setPreferredSize(new Dimension(300, 250));
+			        pictureScrollPane.setViewportBorder(
+			                BorderFactory.createLineBorder(Color.black));
 
-        
-        
+			        pictureScrollPane.setColumnHeaderView(columnView);
+			        pictureScrollPane.setRowHeaderView(rowView);
+
+				//Set the corners.
+			        
+			        pictureScrollPane.setCorner(JScrollPane.UPPER_LEFT_CORNER,
+			                                    buttonCorner);
+			        pictureScrollPane.setCorner(JScrollPane.LOWER_LEFT_CORNER,
+			                                    new Corner());
+			        pictureScrollPane.setCorner(JScrollPane.UPPER_RIGHT_CORNER, new Corner());
+			        removeAll();
+
+			        //Put it in this panel.
+			        add(pictureScrollPane);
+			        revalidate();
+			        repaint();				
+			        
+       				imageList.add(file.getPath().toString());
+       				
+//       				System.out.println(imageList);
+       			}
+       		}
+       	 }
+       });
+		
+		boundPanel.add(brouseButton);
+		add(boundPanel);
         setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
 	}
-	
-	
 	
 	public void itemStateChanged(ItemEvent e) {
         if (e.getStateChange() == ItemEvent.SELECTED) {
