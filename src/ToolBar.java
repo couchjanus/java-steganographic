@@ -20,7 +20,7 @@ public class ToolBar extends JToolBar{
 			TPane.addTab(title, tabPanel);
 			TPane.setSelectedIndex(TPane.indexOfTab(title));
 			int index = TPane.indexOfTab(title);
-			TPane.setTabComponentAt(index, new ButtonTabComponent(TPane));
+			TPane.setTabComponentAt(index, new ButtonTabComponent(TPane, imageList));
 		}
 	};
 	public ToolBar(JTabbedPane TPane, ArrayList<String> imageList) {

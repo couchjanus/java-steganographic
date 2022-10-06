@@ -31,13 +31,14 @@ public class TabbedPanelLeft extends JPanel {
 		index = tabbedPane.indexOfTab(title);
 		tabbedPane.setSelectedIndex(index);
 		
-		tabbedPane.setTabComponentAt(index, new ButtonTabComponent(tabbedPane));
+		tabbedPane.setTabComponentAt(index, new ButtonTabComponent(tabbedPane, imageList));
 		
 		ChangeListener changeListener = new ChangeListener() {
 			public void stateChanged(ChangeEvent changeEvent) {
 				JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
 				index = sourceTabbedPane.getSelectedIndex();
 				System.out.println("Tabbed index: " + index);
+				System.out.println("imageList: " + imageList);
 			}
 		};
 		tabbedPane.addChangeListener(changeListener);

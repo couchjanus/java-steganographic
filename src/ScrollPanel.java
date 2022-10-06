@@ -23,6 +23,7 @@ implements ItemListener{
     
     private JFileChooser fc;
     static final private String ATTACH = "attach";
+    private JPanel buttonCorner;
     
 	public ScrollPanel(ArrayList<String> imageList, SelectedRegion selectedRegion) {
 		this.imageList = imageList;
@@ -37,13 +38,12 @@ implements ItemListener{
         rowView.setPreferredHeight(480);
         
         //Create the corners.
-        JPanel buttonCorner = new JPanel(); //use FlowLayout
+        buttonCorner = new JPanel(); //use FlowLayout
         isMetric = new JToggleButton("cm", true);
         isMetric.setFont(new Font("SansSerif", Font.PLAIN, 11));
         isMetric.setMargin(new Insets(2,2,2,2));
         isMetric.addItemListener(this);
         buttonCorner.add(isMetric); 
-        
         
         JPanel boundPanel = new JPanel();
         
@@ -61,41 +61,7 @@ implements ItemListener{
 			@Override
 			public void filesDropped(File[] files) {
 				try {
-					imageIcon = createImageIcon(files[0].getCanonicalPath());
-					
-					if (imageIcon != null) {
-			            columnView.setPreferredWidth(imageIcon.getIconWidth());
-			            rowView.setPreferredHeight(imageIcon.getIconHeight());
-			        } else {
-			            columnView.setPreferredWidth(320);
-			            rowView.setPreferredHeight(480);
-			        }
-					
-					imageList.add(files[0].getCanonicalPath());
-					
-					 //Set up the scroll pane.
-			        picture = new ScrollablePicture(imageIcon, columnView.getIncrement(), selectedRegion, files[0].getCanonicalPath());
-			        JScrollPane pictureScrollPane = new JScrollPane(picture);
-			        pictureScrollPane.setPreferredSize(new Dimension(300, 250));
-			        pictureScrollPane.setViewportBorder(
-			                BorderFactory.createLineBorder(Color.black));
-
-			        pictureScrollPane.setColumnHeaderView(columnView);
-			        pictureScrollPane.setRowHeaderView(rowView);
-
-				//Set the corners.
-			        
-			        pictureScrollPane.setCorner(JScrollPane.UPPER_LEFT_CORNER,
-			                                    buttonCorner);
-			        pictureScrollPane.setCorner(JScrollPane.LOWER_LEFT_CORNER,
-			                                    new Corner());
-			        pictureScrollPane.setCorner(JScrollPane.UPPER_RIGHT_CORNER, new Corner());
-			        removeAll();
-
-			        //Put it in this panel.
-			        add(pictureScrollPane);
-			        revalidate();
-			        repaint();
+					drawPicture(files[0].getCanonicalPath());
 				}catch(java.io.IOException e) {
 					
 				}
@@ -128,51 +94,56 @@ implements ItemListener{
        			if (returnVal == JFileChooser.APPROVE_OPTION) 
        			{
        				File file = fc.getSelectedFile();
-       				
-       				imageIcon = createImageIcon(file.getPath().toString());
-					
-					if (imageIcon != null) {
-			            columnView.setPreferredWidth(imageIcon.getIconWidth());
-			            rowView.setPreferredHeight(imageIcon.getIconHeight());
-			        } else {
-			            columnView.setPreferredWidth(320);
-			            rowView.setPreferredHeight(480);
-			        }
-					
-					picture = new ScrollablePicture(imageIcon, columnView.getIncrement(), selectedRegion, file.getPath().toString());
-			        JScrollPane pictureScrollPane = new JScrollPane(picture);
-			        pictureScrollPane.setPreferredSize(new Dimension(300, 250));
-			        pictureScrollPane.setViewportBorder(
-			                BorderFactory.createLineBorder(Color.black));
-
-			        pictureScrollPane.setColumnHeaderView(columnView);
-			        pictureScrollPane.setRowHeaderView(rowView);
-
-				//Set the corners.
-			        
-			        pictureScrollPane.setCorner(JScrollPane.UPPER_LEFT_CORNER,
-			                                    buttonCorner);
-			        pictureScrollPane.setCorner(JScrollPane.LOWER_LEFT_CORNER,
-			                                    new Corner());
-			        pictureScrollPane.setCorner(JScrollPane.UPPER_RIGHT_CORNER, new Corner());
-			        removeAll();
-
-			        //Put it in this panel.
-			        add(pictureScrollPane);
-			        revalidate();
-			        repaint();				
-			        
-       				imageList.add(file.getPath().toString());
-       				
-//       				System.out.println(imageList);
+       				drawPicture(file.getPath().toString());
        			}
        		}
        	 }
        });
 		
+		
 		boundPanel.add(brouseButton);
 		add(boundPanel);
         setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
+	}
+	
+	private void drawPicture(String path) {
+		
+		imageIcon = createImageIcon(path);
+		
+		if (imageIcon != null) {
+            columnView.setPreferredWidth(imageIcon.getIconWidth());
+            rowView.setPreferredHeight(imageIcon.getIconHeight());
+        } else {
+            columnView.setPreferredWidth(320);
+            rowView.setPreferredHeight(480);
+        }
+		
+		picture = new ScrollablePicture(imageIcon, columnView.getIncrement(), selectedRegion, path);
+        JScrollPane pictureScrollPane = new JScrollPane(picture);
+        pictureScrollPane.setPreferredSize(new Dimension(300, 250));
+        pictureScrollPane.setViewportBorder(
+                BorderFactory.createLineBorder(Color.black));
+
+        pictureScrollPane.setColumnHeaderView(columnView);
+        pictureScrollPane.setRowHeaderView(rowView);
+
+	//Set the corners.
+        
+        pictureScrollPane.setCorner(JScrollPane.UPPER_LEFT_CORNER,
+                                    buttonCorner);
+        pictureScrollPane.setCorner(JScrollPane.LOWER_LEFT_CORNER,
+                                    new Corner());
+        pictureScrollPane.setCorner(JScrollPane.UPPER_RIGHT_CORNER, 
+        		new Corner());
+        
+        removeAll();
+
+        //Put it in this panel.
+        add(pictureScrollPane);
+        imageList.add(path);
+        revalidate();
+        repaint();				
+        	
 	}
 	
 	public void itemStateChanged(ItemEvent e) {
