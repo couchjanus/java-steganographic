@@ -6,6 +6,11 @@ public class ImgSizeComponent extends JComponent{
 	private JLabel lblX1, lblX2, lblY1, lblY2;
 	private JTextField txtX1, txtX2, txtY1, txtY2;
 	private final Coords coords;
+	
+	public static int getIndex() {
+		return 1;
+	}
+	
 	public ImgSizeComponent(Coords coords) {
 		super();
 		this.coords = coords;

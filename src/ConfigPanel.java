@@ -10,12 +10,19 @@ import java.awt.FlowLayout;
 
 public class ConfigPanel extends JComponent{
 	private final Coords coords;
-
+	ChiComponent chiComponent;
+	
+	public ChiComponent getChiConfig() {
+		
+		return chiComponent;
+	}
+	
 	public ConfigPanel(Coords coords) {
 		super();
 		this.coords = coords;
-		ChiComponent chiComponent = new ChiComponent();
+		chiComponent = new ChiComponent();
 		chiComponent.setBorder(BorderFactory.createTitledBorder("Config Chi Square"));
+		
 		ImgSizeComponent imgSizeComponent = new ImgSizeComponent(coords);
 		imgSizeComponent.setBorder(BorderFactory.createTitledBorder("Selected Image Region"));
 

@@ -1,14 +1,25 @@
+import static com.tutego.jrtf.Rtf.rtf;
+import static com.tutego.jrtf.RtfHeader.font;
+import static com.tutego.jrtf.RtfPara.p;
+import static com.tutego.jrtf.RtfPara.row;
+import static com.tutego.jrtf.RtfText.bold;
+import static com.tutego.jrtf.RtfText.text;
+import static com.tutego.jrtf.RtfUnit.CM;
 import static javax.swing.GroupLayout.Alignment.BASELINE;
 import static javax.swing.GroupLayout.Alignment.LEADING;
 
+import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
@@ -19,13 +30,27 @@ import javax.swing.JPanel;
 import org.math.plot.Plot2DPanel;
 import org.math.plot.plotObjects.BaseLabel;
 
+import com.tutego.jrtf.RtfHeaderFont;
+import com.tutego.jrtf.RtfPara;
+
 
 public class PresetsPanel extends JComponent{
 	private int chunkSize = 1024;
 	private int chiDirection = 1;
 	ArrayList<String> imageList;
-	public PresetsPanel(ConfigPanel configPanel, Plot2DPanel chiSquarePanel, ArrayList<String> imageList) {
+	
+	ChiComponent chiComponent;
+	
+	BufferedImage image, src;
+	
+	private final Coords coords;
+	
+	public PresetsPanel(ConfigPanel configPanel, Plot2DPanel chiSquarePanel, ArrayList<String> imageList, Coords coords) {
 		super();
+		this.coords = coords;
+		
+//		image = ImageUtils.loadImage(imageList.get(TabbedPanelLeft.getIndex()));
+		
         GroupLayout layout = new GroupLayout(this);
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
@@ -87,9 +112,22 @@ public class PresetsPanel extends JComponent{
         		if(e.getStateChange() == ItemEvent.SELECTED) {
 
         			try {
-        				BufferedImage image = ImageUtils.loadImage(imageList.get(TabbedPanelLeft.getIndex()));
+        				src = ImageUtils.loadImage(imageList.get(TabbedPanelLeft.getIndex()));
+        				
+        				if (coords.getY2()==0) {
+//        					System.out.println("Null coodrs");
+        					coords.setY2(src.getHeight());
+        					coords.setX2(src.getWidth());
+        				}
+        				
+        				image = src.getSubimage(coords.getX1(), coords.getY1(), coords.getX2(), coords.getY2());
+        				
+        				System.out.println("Preset Coords: ("+coords.getX1() +"," + coords.getY1()+") ("+coords.getX2() +","+ coords.getY2()+")");
+        				
         				
         				int numChunks = (int) (Math.floor((image.getWidth() * image.getHeight() * 3 / chunkSize)) + 1.0D);
+        				
+        				System.out.println("numChunks: "+numChunks);
         				
         				double [] x = new double[numChunks];
         				
@@ -101,13 +139,15 @@ public class PresetsPanel extends JComponent{
         				
 //        				System.out.println("chiDirection = "+chiDirection+" chunkSize = "+ chunkSize );
 //        				
-        				chunkSize = configPanel.chiComponentgetChiSize();
-        				chiDirection = configPanel.getChiDirection();
-        				System.out.println("chiDirection = "+chiDirection+" chunkSize = "+ chunkSize );
+        				chiComponent = configPanel.getChiConfig();
+        				chunkSize = chiComponent.getChiSize();
         				
+        				chiDirection = chiComponent.getChiDirection();
+//        				System.out.println("chiDirection: "+chiDirection);
         				switch(chiDirection) {
         				case 1:
         					chiSquareAttack = new ChiSquare(image).attackTopToBottom(chunkSize);
+        					System.out.println("chiSquareAttack = "+chiSquareAttack );
             				avarege = new AvarageLsb(image).attackTopToBottom(chunkSize);
         					break;
         				case 2:
@@ -285,5 +325,22 @@ public class PresetsPanel extends JComponent{
         	}
         });
 	}
-
+	
+	public static void makertf() throws IOException{
+		File out = new File("report.rtf");
+		RtfPara nextPar = RtfPara.p("second paragraph");
+		rtf()
+		.header(font(RtfHeaderFont.WINDINGS).at(1))
+		.section(p("Line 1: ", 2, bold(" Now: "), new Date(), text("dd"), text(true, "111", 2)), 
+				nextPar, row(bold("Hello World"), bold("Test"))
+				.bottomCellBorder().topCellBorder().cellSpace(1, CM)
+				)
+		.out(new FileWriter(out));
+		try {
+			Desktop.getDesktop().open(out);
+		}catch(IOException e) {
+			e.printStackTrace();
+		
+		}
+	}
 }

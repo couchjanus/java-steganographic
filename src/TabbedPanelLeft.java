@@ -22,7 +22,7 @@ public class TabbedPanelLeft extends JPanel {
 		this.imageList = imageList;
 		setLayout(new BorderLayout());
 //		TabToolsPanel topPanel = new TabToolsPanel(tabbedPane);
-		ToolBar toolBar = new ToolBar(tabbedPane, imageList);
+		ToolBar toolBar = new ToolBar(tabbedPane, imageList, coords);
 		add(toolBar, BorderLayout.PAGE_START);
 		
 		PicturePanel tabPicture = new PicturePanel(imageList, coords);

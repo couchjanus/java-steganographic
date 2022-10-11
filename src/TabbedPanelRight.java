@@ -1,4 +1,4 @@
-//import java.awt.Dimension;
+
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -20,21 +20,15 @@ import java.awt.Desktop;
 import java.util.Date;
 //import java.awt.image.*;
 import org.math.plot.Plot2DPanel;
-//import org.math.plot.plotObjects.BaseLabel;
+
 
 public class TabbedPanelRight extends JPanel {
 	
 	JTabbedPane tabbedPane = new JTabbedPane();
 	ArrayList<String> imageList;
-	
-//	private BufferedImage image = null;
-//	private BufferedImage lsbImage = null;
-//	private BufferedImage outImage = null;
-	
+		
 	private Plot2DPanel chiSquarePanel;
 	
-//	private int chunkSize = 1024;
-//	private int chiDirection = 1;
 	private ConfigPanel configPanel;
 	private final Coords coords;
 	
@@ -53,7 +47,7 @@ public class TabbedPanelRight extends JPanel {
       tabbedPane.addTab("Congigs", null, configPanel, "");
 	  
       chiSquarePanel = new Plot2DPanel();
-      PresetsPanel presetsPanel = new PresetsPanel(configPanel, chiSquarePanel, imageList);
+      PresetsPanel presetsPanel = new PresetsPanel(configPanel, chiSquarePanel, imageList, coords);
       tabbedPane.addTab("Presets", null, presetsPanel, "");
       tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
        
@@ -61,7 +55,6 @@ public class TabbedPanelRight extends JPanel {
       tabbedPane.addTab("Histogram", null, panel2,
               "Does Histogram as much nothing");
       tabbedPane.setMnemonicAt(1, KeyEvent.VK_2);
-      
       
       tabbedPane.addTab("Chi-squere", null, chiSquarePanel, null);
        
@@ -78,22 +71,4 @@ public class TabbedPanelRight extends JPanel {
         return panel;
     }
 	
-	public static void makertf() throws IOException{
-		File out = new File("report.rtf");
-		RtfPara nextPar = RtfPara.p("second paragraph");
-		rtf()
-		.header(font(RtfHeaderFont.WINDINGS).at(1))
-		.section(p("Line 1: ", 2, bold(" Now: "), new Date(), text("dd"), text(true, "111", 2)), 
-				nextPar, row(bold("Hello World"), bold("Test"))
-				.bottomCellBorder().topCellBorder().cellSpace(1, CM)
-				)
-		.out(new FileWriter(out));
-		try {
-			Desktop.getDesktop().open(out);
-		}catch(IOException e) {
-			e.printStackTrace();
-		
-		}
-	}
-
 }

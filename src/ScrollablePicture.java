@@ -64,7 +64,11 @@ public class ScrollablePicture extends JLabel
         				coords.setY1(startDrag.y);
         				coords.setY2(e.getY()-startDrag.y);
         				
-        				System.out.println("Coords: ("+coords.getX1() +"," + coords.getY1()+") ("+coords.getX2() +","+ coords.getY2()+")");
+//        				int index = this.getSelectedIndex();
+        				
+//        				System.out.println("Tabbed index: " + index);
+        				
+//        				System.out.println("Coords: ("+coords.getX1() +"," + coords.getY1()+") ("+coords.getX2() +","+ coords.getY2()+")");
         				
         				selectedRegion.updateSelectedRegion(image.getSubimage(startDrag.x, startDrag.y, e.getX()-startDrag.x, e.getY()-startDrag.y));
         				

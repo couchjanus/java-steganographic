@@ -20,6 +20,8 @@ public class AvarageLsb {
 		this.image = image;
 		this.width = this.image.getWidth();
 		this.height = this.image.getHeight();
+		
+//		System.out.println("width= "+ width + " height= "+height );
 	}
 	
 	public double[] attackTopToBottom(int chunkSize) {
