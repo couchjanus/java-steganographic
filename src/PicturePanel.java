@@ -14,19 +14,21 @@ public class PicturePanel extends JPanel {
 
     ArrayList<String> imageList;
     private BufferedImage image;
- 
+    private final Coords coords;
+    
     private ScrollPanel scrollPanel;
     
-	public PicturePanel(ArrayList<String> imageList) {
+	public PicturePanel(ArrayList<String> imageList, Coords coords) {
 		super();
 		this.imageList = imageList;
-
+		this.coords = coords;
+		
 		setLayout(new GridLayout(2,1));
 		SelectedRegion selectedAreaPanel = new SelectedRegion();
 		
 		selectedAreaPanel.setLayout(new BorderLayout());
 		selectedAreaPanel.setBackground(Color.red);
-		scrollPanel = new ScrollPanel(imageList, selectedAreaPanel);
+		scrollPanel = new ScrollPanel(imageList, selectedAreaPanel, coords);
 		
 		add(scrollPanel);
 		add(selectedAreaPanel);

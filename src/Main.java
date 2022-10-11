@@ -20,8 +20,9 @@ implements ActionListener {
 		mainPanel = new JPanel(new BorderLayout());
 		mainPanel.setBackground(Color.RED);
 		mainPanel.setLayout(new GridLayout(1,2));
-		leftPanel = new TabbedPanelLeft(imageList);
-        rightPanel = new TabbedPanelRight(imageList);
+		Coords coords =  new Coords();
+		leftPanel = new TabbedPanelLeft(imageList, coords);
+        rightPanel = new TabbedPanelRight(imageList, coords);
 
         mainPanel.add(leftPanel, BorderLayout.LINE_START);
         mainPanel.add(rightPanel, BorderLayout.LINE_END);

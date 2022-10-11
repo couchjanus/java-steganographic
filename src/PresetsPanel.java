@@ -101,7 +101,7 @@ public class PresetsPanel extends JComponent{
         				
 //        				System.out.println("chiDirection = "+chiDirection+" chunkSize = "+ chunkSize );
 //        				
-        				chunkSize = configPanel.getChiSize();
+        				chunkSize = configPanel.chiComponentgetChiSize();
         				chiDirection = configPanel.getChiDirection();
         				System.out.println("chiDirection = "+chiDirection+" chunkSize = "+ chunkSize );
         				

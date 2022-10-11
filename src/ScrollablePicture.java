@@ -23,11 +23,14 @@ public class ScrollablePicture extends JLabel
     private BufferedImage image;
     private String path;
     
-    public ScrollablePicture(ImageIcon i, int m, SelectedRegion selectedRegion, String path) {
+    private final Coords coords;
+    
+    public ScrollablePicture(ImageIcon i, int m, SelectedRegion selectedRegion, String path, Coords coords) {
         super(i);
         this.selectedRegion = selectedRegion;
         this.path = path;
         this.image = ImageUtils.loadImage(this.path);
+        this.coords = coords;
         
         if (i == null) {
             missingPicture = true;
@@ -52,11 +55,19 @@ public class ScrollablePicture extends JLabel
         			try {
         				shape = makeRectangle(startDrag.x, startDrag.y, e.getX(), e.getY());
         				
-        				System.out.println("Rect: ("+startDrag.x +"," + startDrag.y+") ("+(e.getX()-startDrag.x) +","+ (e.getY()-startDrag.y)+")");
+//        				System.out.println("Rect: ("+startDrag.x +"," + startDrag.y+") ("+(e.getX()-startDrag.x) +","+ (e.getY()-startDrag.y)+")");
         				
         				System.out.println("Rect: ("+startDrag.x +"," + startDrag.y+") ("+(endDrag.x) +","+ (endDrag.y)+")");
         				
+        				coords.setX1(startDrag.x);
+        				coords.setX2(e.getX()-startDrag.x);
+        				coords.setY1(startDrag.y);
+        				coords.setY2(e.getY()-startDrag.y);
+        				
+        				System.out.println("Coords: ("+coords.getX1() +"," + coords.getY1()+") ("+coords.getX2() +","+ coords.getY2()+")");
+        				
         				selectedRegion.updateSelectedRegion(image.getSubimage(startDrag.x, startDrag.y, e.getX()-startDrag.x, e.getY()-startDrag.y));
+        				
         				startDrag = null;
         				endDrag = null;
         				repaint();

@@ -36,17 +36,19 @@ public class TabbedPanelRight extends JPanel {
 //	private int chunkSize = 1024;
 //	private int chiDirection = 1;
 	private ConfigPanel configPanel;
+	private final Coords coords;
 	
-	public TabbedPanelRight(ArrayList<String> imageList) {
+	public TabbedPanelRight(ArrayList<String> imageList, Coords coords) {
 	  super();
 	  setLayout(new BorderLayout());
 	  this.imageList = imageList;
+	  this.coords = coords;
 	  
 	  RightToolbar toolBar = new RightToolbar(tabbedPane, imageList);
 	  
 	  add(toolBar, BorderLayout.PAGE_START);
 	  
-	  configPanel = new ConfigPanel();
+	  configPanel = new ConfigPanel(coords);
 	  
       tabbedPane.addTab("Congigs", null, configPanel, "");
 	  

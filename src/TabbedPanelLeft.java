@@ -10,21 +10,22 @@ import javax.swing.event.*;
 public class TabbedPanelLeft extends JPanel {
 	JTabbedPane tabbedPane = new JTabbedPane();
 	ArrayList<String> imageList;
-	
+	private final Coords coords;
 	private static int index;
 	
 	public static int getIndex() {
 		return index;
 	}
-	public TabbedPanelLeft(ArrayList<String> imageList) {
+	public TabbedPanelLeft(ArrayList<String> imageList, Coords coords) {
 		super();
+		this.coords = coords;
 		this.imageList = imageList;
 		setLayout(new BorderLayout());
 //		TabToolsPanel topPanel = new TabToolsPanel(tabbedPane);
 		ToolBar toolBar = new ToolBar(tabbedPane, imageList);
 		add(toolBar, BorderLayout.PAGE_START);
 		
-		PicturePanel tabPicture = new PicturePanel(imageList);
+		PicturePanel tabPicture = new PicturePanel(imageList, coords);
 		
 		String title = "New Picture 0";
 		tabbedPane.addTab(title, tabPicture);

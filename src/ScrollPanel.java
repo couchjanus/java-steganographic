@@ -24,10 +24,12 @@ implements ItemListener{
     private JFileChooser fc;
     static final private String ATTACH = "attach";
     private JPanel buttonCorner;
+    private final Coords coords;
     
-	public ScrollPanel(ArrayList<String> imageList, SelectedRegion selectedRegion) {
+	public ScrollPanel(ArrayList<String> imageList, SelectedRegion selectedRegion, Coords coords) {
 		this.imageList = imageList;
 		this.selectedRegion = selectedRegion;
+		this.coords = coords;
 		
 		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		//Create the row and column headers.
@@ -118,7 +120,7 @@ implements ItemListener{
             rowView.setPreferredHeight(480);
         }
 		
-		picture = new ScrollablePicture(imageIcon, columnView.getIncrement(), selectedRegion, path);
+		picture = new ScrollablePicture(imageIcon, columnView.getIncrement(), selectedRegion, path, coords);
         JScrollPane pictureScrollPane = new JScrollPane(picture);
         pictureScrollPane.setPreferredSize(new Dimension(300, 250));
         pictureScrollPane.setViewportBorder(
