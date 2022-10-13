@@ -44,7 +44,7 @@ public class ChiSquare {
 	}
 	
 	public double[] attackTopToBottom(int chunkSize) {
-//		System.out.println("width= "+ width + " height= "+height );
+
 		this.numChunks = (int) (Math.floor((width * height * 3 / chunkSize)) + 1.0D);
 		values = new int[numChunks];
 		values = getValues(values);
@@ -55,12 +55,10 @@ public class ChiSquare {
 		int nbBytes = 1;
 		int red, green, blue;
 		
-//		System.out.println("height= "+ height );
 		for (int j = 0; j < height; j++) {
-			System.out.println("j= "+ j );
 			
 			for(int i = 0; i < width; i++) {
-//				System.out.println("length= "+ this.chiSquareValues.length );
+
 				
 				if(block < this.chiSquareValues.length) {
 					red = (new Color(image.getRGB(i, j))).getRed();

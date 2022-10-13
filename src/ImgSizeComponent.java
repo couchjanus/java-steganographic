@@ -1,11 +1,13 @@
 import javax.swing.JComponent;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.FocusListener;
+import java.awt.event.FocusEvent;
 
 public class ImgSizeComponent extends JComponent{
 	private JLabel lblX1, lblX2, lblY1, lblY2;
 	private JTextField txtX1, txtX2, txtY1, txtY2;
-	private final Coords coords;
+//	private final Coords coords;
 	
 	public static int getIndex() {
 		return 1;
@@ -13,20 +15,20 @@ public class ImgSizeComponent extends JComponent{
 	
 	public ImgSizeComponent(Coords coords) {
 		super();
-		this.coords = coords;
+//		this.coords = coords;
 		lblX1 = new JLabel("Start x:");
 		lblX2 = new JLabel("End x:");
 		lblY1 = new JLabel("Start y:");
 		lblY2 = new JLabel("End y:");
 		
 		txtX1 = new JTextField();
-		txtX1.setText(Integer.toString(coords.getX1()));
+		txtX1.setText(Integer.toString(Coords.getX1()));
 		txtX2 = new JTextField();
-		txtX2.setText(Integer.toString(coords.getX2()));
+		txtX2.setText(Integer.toString(Coords.getX2()));
 		txtY1 = new JTextField();
-		txtY1.setText(Integer.toString(coords.getY1()));
+		txtY1.setText(Integer.toString(Coords.getY1()));
 		txtY2 = new JTextField();
-		txtY2.setText(Integer.toString(coords.getY2()));
+		txtY2.setText(Integer.toString(Coords.getY2()));
 		
 		txtX1.setHorizontalAlignment(SwingConstants.CENTER);
 		txtX2.setHorizontalAlignment(SwingConstants.CENTER);
@@ -39,6 +41,21 @@ public class ImgSizeComponent extends JComponent{
 		txtY2.setPreferredSize(new Dimension(50, 30));
 		
 		setLayout(new GridLayout(2,4));
+		
+		txtX1.addFocusListener((FocusListener) new FocusListener() {
+			public void focusGained(FocusEvent e) {
+				txtX1.setText(Integer.toString(Coords.getX1()));
+				
+				txtX2.setText(Integer.toString(Coords.getX2()));
+				
+				txtY1.setText(Integer.toString(Coords.getY1()));
+				
+				txtY2.setText(Integer.toString(Coords.getY2()));
+			}
+			public void focusLost(FocusEvent e) {
+				
+			}
+		});
 		add(lblX1);
 		add(txtX1);
 		

@@ -10,6 +10,7 @@ import static javax.swing.GroupLayout.Alignment.LEADING;
 
 import java.awt.Desktop;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -112,38 +113,22 @@ public class PresetsPanel extends JComponent{
         		if(e.getStateChange() == ItemEvent.SELECTED) {
 
         			try {
-        				src = ImageUtils.loadImage(imageList.get(TabbedPanelLeft.getIndex()));
-        				
-        				if (coords.getY2()==0) {
-//        					System.out.println("Null coodrs");
-        					coords.setY2(src.getHeight());
-        					coords.setX2(src.getWidth());
+        				if (Coords.isSelected) {
+        					image = copyImage(ImageUtils.loadImage(imageList.get(TabbedPanelLeft.getIndex())).getSubimage(Coords.getX1(), Coords.getY1(), Coords.getX2(), Coords.getY2()));
+//        					
+        				}else {
+        					image = ImageUtils.loadImage(imageList.get(TabbedPanelLeft.getIndex()));
         				}
-        				
-        				image = src.getSubimage(coords.getX1(), coords.getY1(), coords.getX2(), coords.getY2());
-        				
-        				System.out.println("Preset Coords: ("+coords.getX1() +"," + coords.getY1()+") ("+coords.getX2() +","+ coords.getY2()+")");
-        				
-        				
         				int numChunks = (int) (Math.floor((image.getWidth() * image.getHeight() * 3 / chunkSize)) + 1.0D);
-        				
-        				System.out.println("numChunks: "+numChunks);
-        				
-        				double [] x = new double[numChunks];
-        				
-        				for(int i = 0; i < numChunks; i++) {
-        					x[i] = i;
-        				}
+        				        				
         				double[] chiSquareAttack = new double[numChunks];
         				double[] avarege = new double[numChunks];
-        				
-//        				System.out.println("chiDirection = "+chiDirection+" chunkSize = "+ chunkSize );
-//        				
+ 
         				chiComponent = configPanel.getChiConfig();
         				chunkSize = chiComponent.getChiSize();
         				
         				chiDirection = chiComponent.getChiDirection();
-//        				System.out.println("chiDirection: "+chiDirection);
+
         				switch(chiDirection) {
         				case 1:
         					chiSquareAttack = new ChiSquare(image).attackTopToBottom(chunkSize);
@@ -161,6 +146,12 @@ public class PresetsPanel extends JComponent{
         				case 4:
         					break;
             				
+        				}
+        				
+        				double [] x = new double[numChunks];
+        				
+        				for(int i = 0; i < numChunks; i++) {
+        					x[i] = i;
         				}
         				
         				chiSquarePanel.removeAllPlots(); 
@@ -342,5 +333,13 @@ public class PresetsPanel extends JComponent{
 			e.printStackTrace();
 		
 		}
+	}
+	
+	public static BufferedImage copyImage(BufferedImage src) {
+		BufferedImage dest = new BufferedImage(src.getWidth(), src.getHeight(), src.getType());
+		Graphics g = dest.getGraphics();
+		g.drawImage(src, 0, 0, null);
+		g.dispose();
+		return dest;
 	}
 }

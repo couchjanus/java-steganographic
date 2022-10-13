@@ -3,6 +3,8 @@ public class Coords {
 	
 	private static int x1, y1, x2, y2;
 	
+	public static boolean isSelected = false;
+	
 	public static int getX1() {
 		return x1;
 	}

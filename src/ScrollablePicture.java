@@ -31,7 +31,11 @@ public class ScrollablePicture extends JLabel
         this.path = path;
         this.image = ImageUtils.loadImage(this.path);
         this.coords = coords;
-        
+        Coords.setX1(0);
+		Coords.setX2(image.getWidth());
+		Coords.setY1(0);
+		Coords.setY2(image.getHeight());
+		
         if (i == null) {
             missingPicture = true;
             setText("No picture found.");
@@ -57,12 +61,13 @@ public class ScrollablePicture extends JLabel
         				
 //        				System.out.println("Rect: ("+startDrag.x +"," + startDrag.y+") ("+(e.getX()-startDrag.x) +","+ (e.getY()-startDrag.y)+")");
         				
-        				System.out.println("Rect: ("+startDrag.x +"," + startDrag.y+") ("+(endDrag.x) +","+ (endDrag.y)+")");
+//        				System.out.println("Rect: ("+startDrag.x +"," + startDrag.y+") ("+(endDrag.x) +","+ (endDrag.y)+")");
         				
-        				coords.setX1(startDrag.x);
-        				coords.setX2(e.getX()-startDrag.x);
-        				coords.setY1(startDrag.y);
-        				coords.setY2(e.getY()-startDrag.y);
+        				Coords.setX1(startDrag.x);
+        				Coords.setX2(e.getX()-startDrag.x);
+        				Coords.setY1(startDrag.y);
+        				Coords.setY2(e.getY()-startDrag.y);
+        				Coords.isSelected = true;
         				
 //        				int index = this.getSelectedIndex();
         				
