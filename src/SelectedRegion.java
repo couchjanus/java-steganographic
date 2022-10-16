@@ -10,7 +10,8 @@ public class SelectedRegion extends JPanel{
 	
 	public void updateSelectedRegion(BufferedImage img) {
 		Graphics g = this.getGraphics(); 
-		g.clearRect(0, 0, 400, 350);
+//		g.clearRect(0, 0, 400, 350);
+		super.paintComponent(g);
 		g.drawImage(img, 50, 50, null);
 	}
 
