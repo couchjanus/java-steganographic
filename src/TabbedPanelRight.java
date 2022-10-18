@@ -25,29 +25,28 @@ import org.math.plot.Plot2DPanel;
 public class TabbedPanelRight extends JPanel {
 	
 	JTabbedPane tabbedPane = new JTabbedPane();
-	ArrayList<String> imageList;
+	
 		
 	private Plot2DPanel chiSquarePanel;
 	
 	private ConfigPanel configPanel;
-	private final Coords coords;
 	
-	public TabbedPanelRight(ArrayList<String> imageList, Coords coords) {
+	
+	public TabbedPanelRight(TabbedPanelLeft leftPanel) {
 	  super();
 	  setLayout(new BorderLayout());
-	  this.imageList = imageList;
-	  this.coords = coords;
 	  
-	  RightToolbar toolBar = new RightToolbar(tabbedPane, imageList);
+	  
+	  RightToolbar toolBar = new RightToolbar(tabbedPane);
 	  
 	  add(toolBar, BorderLayout.PAGE_START);
 	  
-	  configPanel = new ConfigPanel(coords);
+	  configPanel = new ConfigPanel(leftPanel);
 	  
       tabbedPane.addTab("Congigs", null, configPanel, "");
 	  
       chiSquarePanel = new Plot2DPanel();
-      PresetsPanel presetsPanel = new PresetsPanel(configPanel, chiSquarePanel, imageList, coords);
+      PresetsPanel presetsPanel = new PresetsPanel(configPanel, chiSquarePanel);
       tabbedPane.addTab("Presets", null, presetsPanel, "");
       tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
        

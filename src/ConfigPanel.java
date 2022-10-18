@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.awt.FlowLayout;
 
 public class ConfigPanel extends JComponent{
-	private final Coords coords;
+	
 	ChiComponent chiComponent;
 	
 	public ChiComponent getChiConfig() {
@@ -17,13 +17,14 @@ public class ConfigPanel extends JComponent{
 		return chiComponent;
 	}
 	
-	public ConfigPanel(Coords coords) {
+	public ConfigPanel(TabbedPanelLeft leftPanel) {
 		super();
-		this.coords = coords;
+		
 		chiComponent = new ChiComponent();
 		chiComponent.setBorder(BorderFactory.createTitledBorder("Config Chi Square"));
-		
-		ImgSizeComponent imgSizeComponent = new ImgSizeComponent(coords);
+		PicturePanel picturePanel = leftPanel.getPicturePanel();
+		SelectedRegion selectedRegion = picturePanel.getSelectedRegion();
+		ImgSizeComponent imgSizeComponent = new ImgSizeComponent(selectedRegion);
 		imgSizeComponent.setBorder(BorderFactory.createTitledBorder("Selected Image Region"));
 
 		setLayout(new FlowLayout());

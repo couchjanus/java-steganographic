@@ -10,25 +10,25 @@ import java.util.ArrayList;
 import java.awt.event.*;
 
 public class PicturePanel extends JPanel {
-	static final long serialVersionUID = -1L;
-
-    ArrayList<String> imageList;
+	static final long serialVersionUID = -1L; 
     private BufferedImage image;
-    private final Coords coords;
     
     private ScrollPanel scrollPanel;
+    SelectedRegion selectedAreaPanel;
     
-	public PicturePanel(ArrayList<String> imageList, Coords coords) {
+    public SelectedRegion getSelectedRegion() {
+    	return selectedAreaPanel;
+    }
+    
+	public PicturePanel() {
 		super();
-		this.imageList = imageList;
-		this.coords = coords;
 		
 		setLayout(new GridLayout(2,1));
-		SelectedRegion selectedAreaPanel = new SelectedRegion();
+		selectedAreaPanel = new SelectedRegion();
 		
 		selectedAreaPanel.setLayout(new BorderLayout());
 		selectedAreaPanel.setBackground(Color.red);
-		scrollPanel = new ScrollPanel(imageList, selectedAreaPanel, coords);
+		scrollPanel = new ScrollPanel(selectedAreaPanel);
 		
 		add(scrollPanel);
 		add(selectedAreaPanel);

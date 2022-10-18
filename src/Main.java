@@ -3,26 +3,21 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.util.ArrayList;
 
-//import org.apache.common.math3.stat.inference.*;
-//import org.apache.commons.math3.stat.inference.TestUtils;
-
 public class Main extends JFrame
 implements ActionListener {
 	
-    private JPanel mainPanel, leftPanel, rightPanel;
+    private JPanel mainPanel;
+    TabbedPanelLeft leftPanel;
+    TabbedPanelRight rightPanel;
     
-    ArrayList<String> imageList = new ArrayList<String>();
-    
-    DTPicture picture1, picture2, picture3;
-    PictureTransferHandler picHandler;
 	public Main() {
 		super("Staganographsc Analizer");
 		mainPanel = new JPanel(new BorderLayout());
 		mainPanel.setBackground(Color.RED);
 		mainPanel.setLayout(new GridLayout(1,2));
-		Coords coords =  new Coords();
-		leftPanel = new TabbedPanelLeft(imageList, coords);
-        rightPanel = new TabbedPanelRight(imageList, coords);
+		
+		leftPanel = new TabbedPanelLeft();
+        rightPanel = new TabbedPanelRight(leftPanel);
 
         mainPanel.add(leftPanel, BorderLayout.LINE_START);
         mainPanel.add(rightPanel, BorderLayout.LINE_END);
@@ -87,14 +82,7 @@ implements ActionListener {
 	        frame.setVisible(true);
 	    }
 	 
-	 public static void main(String[] args) {
-	        //Schedule a job for the event dispatch thread:
-	        //creating and showing this application's GUI.
-		 	long[] o = {10, 9, 11};
-		 	double[] e = {10.1, 0.9, 10.3};
-		 	
-//		 	System.out.println(TestUtils.chiSquare(e, o));
-		 	
+	 public static void main(String[] args) {	
 	        SwingUtilities.invokeLater(new Runnable() {
 	            public void run() {
 	                //Turn off metal's use of bold fonts

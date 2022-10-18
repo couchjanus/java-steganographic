@@ -14,14 +14,14 @@ import javax.swing.JToolBar;
 import javax.swing.border.LineBorder;
 
 public class RightToolbar extends JToolBar {
-	ArrayList<String> imageList;
+	
 	JTabbedPane TPane;
 	public BufferedImage image;
 	
-	public RightToolbar(JTabbedPane TPane, ArrayList<String> imageList) {
+	public RightToolbar(JTabbedPane TPane) {
 		super();
 		this.TPane = TPane;
-		this.imageList = imageList;
+		
 		add(Box.createHorizontalGlue());
 		setBorder(new LineBorder(Color.LIGHT_GRAY, 1));
 		add(histAction);
@@ -46,7 +46,7 @@ public class RightToolbar extends JToolBar {
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			loadImage(imageList.get(TabbedPanelLeft.getIndex()));
+			loadImage(ImgList.images.get(TabbedPanelLeft.getIndex()));
 			BufferedImage img = getImage();
 			
 			Histogram hist = new Histogram(img);	

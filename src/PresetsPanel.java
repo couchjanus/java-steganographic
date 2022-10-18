@@ -38,17 +38,15 @@ import com.tutego.jrtf.RtfPara;
 public class PresetsPanel extends JComponent{
 	private int chunkSize = 1024;
 	private int chiDirection = 1;
-	ArrayList<String> imageList;
 	
 	ChiComponent chiComponent;
 	
 	BufferedImage image, src;
+
 	
-	private final Coords coords;
-	
-	public PresetsPanel(ConfigPanel configPanel, Plot2DPanel chiSquarePanel, ArrayList<String> imageList, Coords coords) {
+	public PresetsPanel(ConfigPanel configPanel, Plot2DPanel chiSquarePanel) {
 		super();
-		this.coords = coords;
+		
 		
 //		image = ImageUtils.loadImage(imageList.get(TabbedPanelLeft.getIndex()));
 		
@@ -114,10 +112,10 @@ public class PresetsPanel extends JComponent{
 
         			try {
         				if (Coords.isSelected) {
-        					image = copyImage(ImageUtils.loadImage(imageList.get(TabbedPanelLeft.getIndex())).getSubimage(Coords.getX1(), Coords.getY1(), Coords.getX2(), Coords.getY2()));
+        					image = copyImage(ImageUtils.loadImage(ImgList.images.get(TabbedPanelLeft.getIndex())).getSubimage(Coords.getX1(), Coords.getY1(), Coords.getX2(), Coords.getY2()));
 //        					
         				}else {
-        					image = ImageUtils.loadImage(imageList.get(TabbedPanelLeft.getIndex()));
+        					image = ImageUtils.loadImage(ImgList.images.get(TabbedPanelLeft.getIndex()));
         				}
         				int numChunks = (int) (Math.floor((image.getWidth() * image.getHeight() * 3 / chunkSize)) + 1.0D);
         				        				
@@ -185,7 +183,7 @@ public class PresetsPanel extends JComponent{
         			double [] results;
         			double avg = 0;
         			try {
-        				BufferedImage image = ImageUtils.loadImage(imageList.get(TabbedPanelLeft.getIndex()));
+        				BufferedImage image = ImageUtils.loadImage(ImgList.images.get(TabbedPanelLeft.getIndex()));
         				SPA sp = new SPA(image);
         				results = sp.analysis();
         				String [] channels = {"Red", "Green", "Blue"};
@@ -213,7 +211,7 @@ public class PresetsPanel extends JComponent{
         		if(e.getStateChange() == ItemEvent.SELECTED) {
 
         			try {
-        				BufferedImage image = ImageUtils.loadImage(imageList.get(TabbedPanelLeft.getIndex()));
+        				BufferedImage image = ImageUtils.loadImage(ImgList.images.get(TabbedPanelLeft.getIndex()));
         				SimplePair sp = new SimplePair(image);
         				double avg = 0;
         				double result = sp.analysis(0);
@@ -241,7 +239,7 @@ public class PresetsPanel extends JComponent{
         		if(event.getStateChange() == ItemEvent.SELECTED) {
         			
         			try {
-        				BufferedImage image = ImageUtils.loadImage(imageList.get(TabbedPanelLeft.getIndex()));
+        				BufferedImage image = ImageUtils.loadImage(ImgList.images.get(TabbedPanelLeft.getIndex()));
         				RSA rsa = new RSA(image);
         				double avg = 0;
         				double[] result = rsa.analysis(0, true);

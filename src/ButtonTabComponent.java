@@ -7,11 +7,11 @@ import java.util.ArrayList;
 public class ButtonTabComponent extends JPanel{
 
 	private final JTabbedPane pane;
-	ArrayList<String> imageList;
 	
-	public ButtonTabComponent(final JTabbedPane pane, ArrayList<String> imageList) {
+	
+	public ButtonTabComponent(final JTabbedPane pane) {
 		super(new FlowLayout(FlowLayout.LEFT, 0, 0));
-		this.imageList = imageList;
+		
 		
 		if (pane == null) {
 			throw new NullPointerException("Tabbed Pane is null");
@@ -55,7 +55,7 @@ public class ButtonTabComponent extends JPanel{
 		public void actionPerformed(ActionEvent e) {
 			int i = pane.indexOfTabComponent(ButtonTabComponent.this);
 			if (i != -1) {
-				imageList.remove(i);
+				ImgList.images.remove(i);
 				pane.remove(i);
 			}
 		}
