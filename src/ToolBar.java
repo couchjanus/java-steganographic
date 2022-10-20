@@ -17,6 +17,7 @@ public class ToolBar extends JToolBar{
 			String title = "New Picture" + String.valueOf(tabCount);
 			
 			TPane.addTab(title, tabPanel);
+			
 			TPane.setSelectedIndex(TPane.indexOfTab(title));
 			int index = TPane.indexOfTab(title);
 			TPane.setTabComponentAt(index, new ButtonTabComponent(TPane));

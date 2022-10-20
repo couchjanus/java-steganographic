@@ -142,6 +142,7 @@ implements ItemListener{
         //Put it in this panel.
         add(pictureScrollPane);
         ImgList.images.add(path);
+        
         revalidate();
         repaint();				
         	

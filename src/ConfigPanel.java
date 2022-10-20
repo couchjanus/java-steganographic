@@ -17,6 +17,10 @@ public class ConfigPanel extends JComponent{
 		return chiComponent;
 	}
 	
+	public ConfigPanel() {
+		super();
+	}
+	
 	public ConfigPanel(TabbedPanelLeft leftPanel) {
 		super();
 		
@@ -24,6 +28,7 @@ public class ConfigPanel extends JComponent{
 		chiComponent.setBorder(BorderFactory.createTitledBorder("Config Chi Square"));
 		PicturePanel picturePanel = leftPanel.getPicturePanel();
 		SelectedRegion selectedRegion = picturePanel.getSelectedRegion();
+		
 		ImgSizeComponent imgSizeComponent = new ImgSizeComponent(selectedRegion);
 		imgSizeComponent.setBorder(BorderFactory.createTitledBorder("Selected Image Region"));
 

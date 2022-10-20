@@ -35,6 +35,11 @@ public class ScrollablePicture extends JLabel
 		Coords.setX2(image.getWidth());
 		Coords.setY1(0);
 		Coords.setY2(image.getHeight());
+		selectedRegion.updateSelectedRegion(image);
+		repaint();
+		
+		ImgList.width.add(image.getWidth());
+        ImgList.height.add(image.getHeight());
 		
         if (i == null) {
             missingPicture = true;

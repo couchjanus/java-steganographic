@@ -5,6 +5,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.*;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import java.awt.*;
 //import java.awt.event.*;
 import java.util.ArrayList;
@@ -25,13 +28,17 @@ import org.math.plot.Plot2DPanel;
 public class TabbedPanelRight extends JPanel {
 	
 	JTabbedPane tabbedPane = new JTabbedPane();
-	
+	private static int index;
 		
 	private Plot2DPanel chiSquarePanel;
 	
 	private ConfigPanel configPanel;
 	
+	private JPanel welcome = new JPanel();
 	
+	public static int getIndex() {
+		return index;
+	}
 	public TabbedPanelRight(TabbedPanelLeft leftPanel) {
 	  super();
 	  setLayout(new BorderLayout());
@@ -40,10 +47,13 @@ public class TabbedPanelRight extends JPanel {
 	  RightToolbar toolBar = new RightToolbar(tabbedPane);
 	  
 	  add(toolBar, BorderLayout.PAGE_START);
+	  tabbedPane.addTab("Welcome", null, welcome, "");
 	  
-	  configPanel = new ConfigPanel(leftPanel);
+	  configPanel = new ConfigPanel();
 	  
-      tabbedPane.addTab("Congigs", null, configPanel, "");
+//	  configPanel = new ConfigPanel(leftPanel);
+	  
+      tabbedPane.addTab("Configs", null, configPanel, "");
 	  
       chiSquarePanel = new Plot2DPanel();
       PresetsPanel presetsPanel = new PresetsPanel(configPanel, chiSquarePanel);
@@ -59,6 +69,29 @@ public class TabbedPanelRight extends JPanel {
        
       tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
       
+      
+      ChangeListener changeListener = new ChangeListener() {
+			public void stateChanged(ChangeEvent changeEvent) {
+				JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
+				index = sourceTabbedPane.getSelectedIndex();
+				System.out.println("Tabbed index: " + index);
+				System.out.println("Tabbed left: " + TabbedPanelLeft.getIndex());
+//			
+				if(ImgList.images.size() > TabbedPanelLeft.getIndex()){
+					if((ImgList.images.get(TabbedPanelLeft.getIndex()) != null) && index == 1) {
+						configPanel = new ConfigPanel(leftPanel);
+						tabbedPane.setComponentAt(index, configPanel);
+					}
+				}
+				else {
+					configPanel = new ConfigPanel();
+					tabbedPane.setComponentAt(index, configPanel);
+				}
+				
+			}
+		};
+	  tabbedPane.addChangeListener(changeListener);
+		
       add(tabbedPane);
 	}
 	protected JComponent makeTextPanel(String text) {

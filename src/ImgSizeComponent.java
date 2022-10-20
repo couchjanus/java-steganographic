@@ -32,13 +32,16 @@ public class ImgSizeComponent extends JComponent{
 		lblX2 = new JLabel("End x:");
 		lblY1 = new JLabel("Start y:");
 		lblY2 = new JLabel("End y:");
-		DecimalFormat format = new DecimalFormat();
-		format.setParseIntegerOnly(true);
+//		
+//		DecimalFormat format = new DecimalFormat();
+//		format.setParseIntegerOnly(true);
+//		
+//		NumberFormatter nf = new NumberFormatter();
+//		nf.setValueClass(Integer.class);
+//		nf.setMinimum(0);
+//		nf.setMaximum(w);
 		
-		NumberFormatter nf = new NumberFormatter();
-		nf.setValueClass(Integer.class);
-		nf.setMinimum(0);
-		nf.setMaximum(w);
+		
 		
 		txtX1 = new NumericTextField();
 		
@@ -70,6 +73,7 @@ public class ImgSizeComponent extends JComponent{
 //					System.out.println(txtX1.getLongValue());
 					int v = Math.toIntExact(txtX1.getLongValue());
 					Coords.setX1(v);
+					System.out.println("Width: "+ImgList.width.get(0));
 				}catch(ParseException e1) {
 					System.out.println(e1);
 				}
@@ -123,10 +127,10 @@ public class ImgSizeComponent extends JComponent{
 				txtY2.setValue(Coords.getY2());
 			}
 			public void focusLost(FocusEvent e) {
-				image = ImageUtils.loadImage(ImgList.images.get(TabbedPanelLeft.getIndex()));
-				
-				w = image.getWidth();
-				h = image.getHeight();
+//				image = ImageUtils.loadImage(ImgList.images.get(TabbedPanelLeft.getIndex()));
+//				
+//				w = image.getWidth();
+//				h = image.getHeight();
 				
 				selectedRegion.updateSelectedRegion(ImageUtils.loadImage(ImgList.images.get(TabbedPanelLeft.getIndex())).getSubimage(Coords.getX1(), Coords.getY1(), Coords.getX2(), Coords.getY2()));
 			}
