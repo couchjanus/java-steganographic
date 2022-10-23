@@ -1,6 +1,8 @@
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+
 import javax.swing.event.*;
 
 
@@ -16,6 +18,9 @@ public class TabbedPanelLeft extends JPanel {
 	
 	public PicturePanel getPicturePanel() {
 		return tabPicture;
+	}
+	public TabbedPanelLeft getTabbedPane() {
+		return this;
 	}
 	
 	public TabbedPanelLeft() {
@@ -39,8 +44,17 @@ public class TabbedPanelLeft extends JPanel {
 			public void stateChanged(ChangeEvent changeEvent) {
 				JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
 				index = sourceTabbedPane.getSelectedIndex();
-				System.out.println("Tabbed index: " + index);
+				System.out.println("New Tabbed index: " + index);
 				
+				BufferedImage image = ImageUtils.loadImage(ImgList.images.get(index));
+		        
+		        Coords.setX1(0);
+				Coords.setX2(image.getWidth());
+				Coords.setY1(0);
+				Coords.setY2(image.getHeight());
+				
+//			
+
 			}
 		};
 		tabbedPane.addChangeListener(changeListener);

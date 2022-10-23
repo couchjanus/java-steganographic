@@ -7,7 +7,8 @@ import java.io.*;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
+import java.awt.event.ContainerListener;
+import java.awt.event.ContainerEvent;
 import java.awt.*;
 //import java.awt.event.*;
 import java.util.ArrayList;
@@ -36,24 +37,32 @@ public class TabbedPanelRight extends JPanel {
 	
 	private JPanel welcome = new JPanel();
 	
+	TabbedPanelLeft leftPanel;
+	
 	public static int getIndex() {
 		return index;
 	}
 	public TabbedPanelRight(TabbedPanelLeft leftPanel) {
 	  super();
+	  this.leftPanel = leftPanel;
+	  
 	  setLayout(new BorderLayout());
 	  
+//	  System.out.println(leftPanel.getPicturePanel().getScrollPanel().getSelectedRegion());
+//	  leftPanel.getPicturePanel().getScrollPanel().getSelectedRegion().addContainerListener(new LeftPaneContainerListener());
+	  
+	  leftPanel.getPicturePanel().getScrollPanel().addContainerListener(new CustomContainerListener());
 	  
 	  RightToolbar toolBar = new RightToolbar(tabbedPane);
 	  
 	  add(toolBar, BorderLayout.PAGE_START);
 	  tabbedPane.addTab("Welcome", null, welcome, "");
 	  
-	  configPanel = new ConfigPanel();
+//	  configPanel = new ConfigPanel();
 	  
 //	  configPanel = new ConfigPanel(leftPanel);
 	  
-      tabbedPane.addTab("Configs", null, configPanel, "");
+//      tabbedPane.addTab("Configs", null, configPanel, "");
 	  
       chiSquarePanel = new Plot2DPanel();
       PresetsPanel presetsPanel = new PresetsPanel(configPanel, chiSquarePanel);
@@ -77,16 +86,16 @@ public class TabbedPanelRight extends JPanel {
 				System.out.println("Tabbed index: " + index);
 				System.out.println("Tabbed left: " + TabbedPanelLeft.getIndex());
 //			
-				if(ImgList.images.size() > TabbedPanelLeft.getIndex()){
-					if((ImgList.images.get(TabbedPanelLeft.getIndex()) != null) && index == 1) {
+				if(ImgList.images.size() > 0){
+//					if((ImgList.images.get(TabbedPanelLeft.getIndex()) != null) && index == 1) {
 						configPanel = new ConfigPanel(leftPanel);
-						tabbedPane.setComponentAt(index, configPanel);
-					}
+						tabbedPane.setComponentAt(tabbedPane.getTabCount()-1, configPanel);
+//					}
 				}
-				else {
-					configPanel = new ConfigPanel();
-					tabbedPane.setComponentAt(index, configPanel);
-				}
+//				else {
+//					configPanel = new ConfigPanel();
+//					tabbedPane.setComponentAt(index, configPanel);
+//				}
 				
 			}
 		};
@@ -102,5 +111,29 @@ public class TabbedPanelRight extends JPanel {
         panel.add(filler);
         return panel;
     }
+	
+	class CustomContainerListener implements ContainerListener {
+		public void componentAdded(ContainerEvent e) {
+//			tabbedPane.setSelectedIndex(0);
+			configPanel = new ConfigPanel(leftPanel);
+			tabbedPane.addTab("Config", null, configPanel, "");
+			tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
+		}
+		public void componentRemoved(ContainerEvent e) {
+			
+		}
+	}
+	
+	class LeftPaneContainerListener implements ContainerListener {
+		public void componentAdded(ContainerEvent e) {
+//			configPanel = new ConfigPanel(leftPanel);
+//			tabbedPane.addTab("Config", null, configPanel, "");
+			System.out.println("LeftPaneContainerListener Tabbed index: " + index);
+			tabbedPane.setSelectedIndex(0);
+		}
+		public void componentRemoved(ContainerEvent e) {
+			
+		}
+	}
 	
 }

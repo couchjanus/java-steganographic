@@ -20,6 +20,10 @@ public class PicturePanel extends JPanel {
     	return selectedAreaPanel;
     }
     
+    public ScrollPanel getScrollPanel() {
+    	return scrollPanel;
+    }
+    
 	public PicturePanel() {
 		super();
 		

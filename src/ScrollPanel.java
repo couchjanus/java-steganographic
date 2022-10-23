@@ -24,6 +24,9 @@ implements ItemListener{
     static final private String ATTACH = "attach";
     private JPanel buttonCorner;
    
+    public SelectedRegion getSelectedRegion() {
+    	return selectedRegion;
+    }
     
 	public ScrollPanel(SelectedRegion selectedRegion) {
 		
@@ -114,6 +117,8 @@ implements ItemListener{
 		if (imageIcon != null) {
             columnView.setPreferredWidth(imageIcon.getIconWidth());
             rowView.setPreferredHeight(imageIcon.getIconHeight());
+            
+//            System.out.println(imageIcon.getIconWidth());
         } else {
             columnView.setPreferredWidth(320);
             rowView.setPreferredHeight(480);
@@ -139,7 +144,13 @@ implements ItemListener{
         
         removeAll();
 
-        //Put it in this panel.
+        
+        Coords.setX1(0);	
+		Coords.setY1(0);
+		
+		Coords.setX2(imageIcon.getIconWidth());
+		Coords.setY2(imageIcon.getIconHeight());
+		
         add(pictureScrollPane);
         ImgList.images.add(path);
         

@@ -13,11 +13,15 @@ public class ToolBar extends JToolBar{
 		public void actionPerformed(ActionEvent e)
 		{
 			PicturePanel tabPanel = new PicturePanel();
+			
 			int tabCount = TPane.getTabCount();
 			String title = "New Picture" + String.valueOf(tabCount);
 			
 			TPane.addTab(title, tabPanel);
-			
+			Coords.setX1(0);
+			Coords.setX2(0);
+			Coords.setY1(0);
+			Coords.setY2(0);
 			TPane.setSelectedIndex(TPane.indexOfTab(title));
 			int index = TPane.indexOfTab(title);
 			TPane.setTabComponentAt(index, new ButtonTabComponent(TPane));
