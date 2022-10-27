@@ -16,8 +16,10 @@ implements ActionListener {
 		mainPanel.setBackground(Color.RED);
 		mainPanel.setLayout(new GridLayout(1,2));
 		
-		leftPanel = new TabbedPanelLeft();
-        rightPanel = new TabbedPanelRight(leftPanel);
+		JTabbedPane tabbedPaneRight = new JTabbedPane();
+		
+		leftPanel = new TabbedPanelLeft(tabbedPaneRight);
+        rightPanel = new TabbedPanelRight(leftPanel, tabbedPaneRight);
 
         mainPanel.add(leftPanel, BorderLayout.LINE_START);
         mainPanel.add(rightPanel, BorderLayout.LINE_END);

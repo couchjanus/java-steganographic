@@ -7,6 +7,7 @@ import javax.swing.border.*;
 
 public class ToolBar extends JToolBar{
 	private JTabbedPane TPane;
+	JTabbedPane tabbedPaneRight;
 	
 	Action newAction = new AbstractAction("New Picture", null) {
 		@Override
@@ -27,9 +28,10 @@ public class ToolBar extends JToolBar{
 			TPane.setTabComponentAt(index, new ButtonTabComponent(TPane));
 		}
 	};
-	public ToolBar(JTabbedPane TPane) {
+	public ToolBar(JTabbedPane TPane, JTabbedPane tabbedPaneRight) {
 		super();
 		this.TPane = TPane;
+		this.tabbedPaneRight = tabbedPaneRight;
 		
 		add(Box.createHorizontalGlue());
 		setBorder(new LineBorder(Color.LIGHT_GRAY, 1));

@@ -17,22 +17,27 @@ implements ItemListener{
     private ScrollablePicture picture;
     private ImageIcon imageIcon;
     
+    JScrollPane pictureScrollPane;
     
     private SelectedRegion selectedRegion;
     
     private JFileChooser fc;
     static final private String ATTACH = "attach";
     private JPanel buttonCorner;
-   
+    JTabbedPane tabbedPaneRight;
     public SelectedRegion getSelectedRegion() {
     	return selectedRegion;
     }
     
-	public ScrollPanel(SelectedRegion selectedRegion) {
+    public JScrollPane getPictureScrollPane() {
+    	return pictureScrollPane;
+    }
+    
+	public ScrollPanel(SelectedRegion selectedRegion, JTabbedPane tabbedPaneRight) {
 		
 		this.selectedRegion = selectedRegion;
 		
-		
+		this.tabbedPaneRight = tabbedPaneRight;
 		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		//Create the row and column headers.
         columnView = new Rule(Rule.HORIZONTAL, true);
@@ -124,8 +129,9 @@ implements ItemListener{
             rowView.setPreferredHeight(480);
         }
 		
-		picture = new ScrollablePicture(imageIcon, columnView.getIncrement(), selectedRegion, path);
-        JScrollPane pictureScrollPane = new JScrollPane(picture);
+		picture = new ScrollablePicture(imageIcon, columnView.getIncrement(), selectedRegion, path, tabbedPaneRight);
+        
+		pictureScrollPane = new JScrollPane(picture);
         pictureScrollPane.setPreferredSize(new Dimension(300, 250));
         pictureScrollPane.setViewportBorder(
                 BorderFactory.createLineBorder(Color.black));
@@ -145,15 +151,24 @@ implements ItemListener{
         removeAll();
 
         
-        Coords.setX1(0);	
-		Coords.setY1(0);
-		
-		Coords.setX2(imageIcon.getIconWidth());
-		Coords.setY2(imageIcon.getIconHeight());
+//        Coords.setX1(0);	
+//		Coords.setY1(0);
+//		
+//		Coords.setX2(imageIcon.getIconWidth());
+//		Coords.setY2(imageIcon.getIconHeight());
 		
         add(pictureScrollPane);
+        /**
+         * Added image path and images metrics to Array List
+         * 
+         **/        
         ImgList.images.add(path);
-        
+//        System.out.println("imageIcon.getIconWidth(): " + imageIcon.getIconWidth());
+        ImgList.width.add(imageIcon.getIconWidth());
+        ImgList.height.add(imageIcon.getIconHeight());
+//        System.out.println("ImgList: " + ImgList.images);
+//        System.out.println("ImgList width: " + ImgList.width);
+//        System.out.println("ImgList height: " + ImgList.height);
         revalidate();
         repaint();				
         	

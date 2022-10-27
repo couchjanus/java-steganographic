@@ -36,6 +36,10 @@ public class ButtonTabComponent extends JPanel{
 		setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0));
 	}
 	
+	private boolean indexExists(final ArrayList list, final int index) {
+		return index>=0 && index < list.size();
+	}
+	
 	private class TabButton extends JButton implements ActionListener {
 		public TabButton() {
 			int size = 17;
@@ -55,7 +59,11 @@ public class ButtonTabComponent extends JPanel{
 		public void actionPerformed(ActionEvent e) {
 			int i = pane.indexOfTabComponent(ButtonTabComponent.this);
 			if (i != -1) {
-				ImgList.images.remove(i);
+				if(indexExists(ImgList.images, i)) {
+					ImgList.images.remove(i);
+					ImgList.width.remove(i);
+					ImgList.height.remove(i);
+				}
 				pane.remove(i);
 			}
 		}

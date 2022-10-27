@@ -23,9 +23,13 @@ public class ScrollablePicture extends JLabel
     private BufferedImage image;
     private String path;
     
+    public Shape getShape() {
+    	return shape;
+    }
+    
    
     
-    public ScrollablePicture(ImageIcon i, int m, SelectedRegion selectedRegion, String path) {
+    public ScrollablePicture(ImageIcon i, int m, SelectedRegion selectedRegion, String path, JTabbedPane tabbedPaneRight) {
         super(i);
         this.selectedRegion = selectedRegion;
         this.path = path;
@@ -39,8 +43,8 @@ public class ScrollablePicture extends JLabel
 		selectedRegion.updateSelectedRegion(image);
 		repaint();
 		
-		ImgList.width.add(image.getWidth());
-        ImgList.height.add(image.getHeight());
+//		ImgList.width.add(image.getWidth());
+//        ImgList.height.add(image.getHeight());
 		
         if (i == null) {
             missingPicture = true;
@@ -57,6 +61,7 @@ public class ScrollablePicture extends JLabel
         	public void mousePressed(MouseEvent e) {
         		startDrag = new Point(e.getX(), e.getY());
         		endDrag = startDrag;
+        		tabbedPaneRight.setSelectedIndex(0);
         		System.out.println(endDrag);
         		repaint();
         	}

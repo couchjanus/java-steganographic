@@ -7,7 +7,8 @@ import javax.swing.event.*;
 
 
 public class TabbedPanelLeft extends JPanel {
-	JTabbedPane tabbedPane = new JTabbedPane();
+	static final long serialVersionUID = -1L; 
+	JTabbedPane tabbedPaneLeft = new JTabbedPane();
 	
 	private static int index;
 	PicturePanel tabPicture;
@@ -22,23 +23,24 @@ public class TabbedPanelLeft extends JPanel {
 	public TabbedPanelLeft getTabbedPane() {
 		return this;
 	}
-	
-	public TabbedPanelLeft() {
+	JTabbedPane tabbedPaneRight;
+	public TabbedPanelLeft(JTabbedPane tabbedPaneRight) {
 		super();
+		this.tabbedPaneRight = tabbedPaneRight;
 		
 		setLayout(new BorderLayout());
 
-		ToolBar toolBar = new ToolBar(tabbedPane);
+		ToolBar toolBar = new ToolBar(tabbedPaneLeft, tabbedPaneRight);
 		add(toolBar, BorderLayout.PAGE_START);
 		
-		tabPicture = new PicturePanel();
+		tabPicture = new PicturePanel(tabbedPaneRight);
 		
 		String title = "New Picture 0";
-		tabbedPane.addTab(title, tabPicture);
-		index = tabbedPane.indexOfTab(title);
-		tabbedPane.setSelectedIndex(index);
+		tabbedPaneLeft.addTab(title, tabPicture);
+		index = tabbedPaneLeft.indexOfTab(title);
+		tabbedPaneLeft.setSelectedIndex(index);
 		
-		tabbedPane.setTabComponentAt(index, new ButtonTabComponent(tabbedPane));
+		tabbedPaneLeft.setTabComponentAt(index, new ButtonTabComponent(tabbedPaneLeft));
 		
 		ChangeListener changeListener = new ChangeListener() {
 			public void stateChanged(ChangeEvent changeEvent) {
@@ -46,21 +48,21 @@ public class TabbedPanelLeft extends JPanel {
 				index = sourceTabbedPane.getSelectedIndex();
 				System.out.println("New Tabbed index: " + index);
 				
-				BufferedImage image = ImageUtils.loadImage(ImgList.images.get(index));
-		        
-		        Coords.setX1(0);
-				Coords.setX2(image.getWidth());
-				Coords.setY1(0);
-				Coords.setY2(image.getHeight());
-				
-//			
-
+//				BufferedImage image = ImageUtils.loadImage(ImgList.images.get(index));
+		        if(tabbedPaneLeft.getTabCount() == ImgList.images.size()) {
+		        	Coords.setX1(0);
+			        Coords.setY1(0);
+					Coords.setX2(ImgList.width.get(index));
+					Coords.setY2(ImgList.height.get(index));	
+		        }
+		        tabbedPaneRight.setSelectedIndex(0);
 			}
+			
 		};
-		tabbedPane.addChangeListener(changeListener);
-		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+		tabbedPaneLeft.addChangeListener(changeListener);
+		tabbedPaneLeft.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		
-		add(tabbedPane, BorderLayout.CENTER);
+		add(tabbedPaneLeft, BorderLayout.CENTER);
 
 		
 	}

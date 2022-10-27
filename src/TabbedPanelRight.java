@@ -27,8 +27,9 @@ import org.math.plot.Plot2DPanel;
 
 
 public class TabbedPanelRight extends JPanel {
+	static final long serialVersionUID = -1L; 
 	
-	JTabbedPane tabbedPane = new JTabbedPane();
+	JTabbedPane tabbedPaneRight; // = new JTabbedPane();
 	private static int index;
 		
 	private Plot2DPanel chiSquarePanel;
@@ -42,9 +43,10 @@ public class TabbedPanelRight extends JPanel {
 	public static int getIndex() {
 		return index;
 	}
-	public TabbedPanelRight(TabbedPanelLeft leftPanel) {
+	public TabbedPanelRight(TabbedPanelLeft leftPanel, JTabbedPane tabbedPaneRight) {
 	  super();
 	  this.leftPanel = leftPanel;
+	  this.tabbedPaneRight = tabbedPaneRight;
 	  
 	  setLayout(new BorderLayout());
 	  
@@ -53,30 +55,24 @@ public class TabbedPanelRight extends JPanel {
 	  
 	  leftPanel.getPicturePanel().getScrollPanel().addContainerListener(new CustomContainerListener());
 	  
-	  RightToolbar toolBar = new RightToolbar(tabbedPane);
+	  RightToolbar toolBar = new RightToolbar(tabbedPaneRight);
 	  
 	  add(toolBar, BorderLayout.PAGE_START);
-	  tabbedPane.addTab("Welcome", null, welcome, "");
-	  
-//	  configPanel = new ConfigPanel();
-	  
-//	  configPanel = new ConfigPanel(leftPanel);
-	  
-//      tabbedPane.addTab("Configs", null, configPanel, "");
+	  tabbedPaneRight.addTab("Welcome", null, welcome, "");
 	  
       chiSquarePanel = new Plot2DPanel();
       PresetsPanel presetsPanel = new PresetsPanel(configPanel, chiSquarePanel);
-      tabbedPane.addTab("Presets", null, presetsPanel, "");
-      tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
+      tabbedPaneRight.addTab("Presets", null, presetsPanel, "");
+      tabbedPaneRight.setMnemonicAt(0, KeyEvent.VK_1);
        
       JComponent panel2 = makeTextPanel("Histogram");
-      tabbedPane.addTab("Histogram", null, panel2,
+      tabbedPaneRight.addTab("Histogram", null, panel2,
               "Does Histogram as much nothing");
-      tabbedPane.setMnemonicAt(1, KeyEvent.VK_2);
+      tabbedPaneRight.setMnemonicAt(1, KeyEvent.VK_2);
       
-      tabbedPane.addTab("Chi-squere", null, chiSquarePanel, null);
+      tabbedPaneRight.addTab("Chi-squere", null, chiSquarePanel, null);
        
-      tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+      tabbedPaneRight.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
       
       
       ChangeListener changeListener = new ChangeListener() {
@@ -89,7 +85,7 @@ public class TabbedPanelRight extends JPanel {
 				if(ImgList.images.size() > 0){
 //					if((ImgList.images.get(TabbedPanelLeft.getIndex()) != null) && index == 1) {
 						configPanel = new ConfigPanel(leftPanel);
-						tabbedPane.setComponentAt(tabbedPane.getTabCount()-1, configPanel);
+						tabbedPaneRight.setComponentAt(tabbedPaneRight.getTabCount()-1, configPanel);
 //					}
 				}
 //				else {
@@ -99,9 +95,9 @@ public class TabbedPanelRight extends JPanel {
 				
 			}
 		};
-	  tabbedPane.addChangeListener(changeListener);
+		tabbedPaneRight.addChangeListener(changeListener);
 		
-      add(tabbedPane);
+      add(tabbedPaneRight);
 	}
 	protected JComponent makeTextPanel(String text) {
         JPanel panel = new JPanel(false);
@@ -116,8 +112,8 @@ public class TabbedPanelRight extends JPanel {
 		public void componentAdded(ContainerEvent e) {
 //			tabbedPane.setSelectedIndex(0);
 			configPanel = new ConfigPanel(leftPanel);
-			tabbedPane.addTab("Config", null, configPanel, "");
-			tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
+			tabbedPaneRight.addTab("Config", null, configPanel, "");
+			tabbedPaneRight.setSelectedIndex(tabbedPaneRight.getTabCount()-1);
 		}
 		public void componentRemoved(ContainerEvent e) {
 			
@@ -129,7 +125,7 @@ public class TabbedPanelRight extends JPanel {
 //			configPanel = new ConfigPanel(leftPanel);
 //			tabbedPane.addTab("Config", null, configPanel, "");
 			System.out.println("LeftPaneContainerListener Tabbed index: " + index);
-			tabbedPane.setSelectedIndex(0);
+			tabbedPaneRight.setSelectedIndex(0);
 		}
 		public void componentRemoved(ContainerEvent e) {
 			

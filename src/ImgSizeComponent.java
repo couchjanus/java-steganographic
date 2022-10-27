@@ -18,15 +18,19 @@ public class ImgSizeComponent extends JComponent{
 	private BufferedImage image;
 	
 	private int w, h;
+	Shape shape;
 	
 	public static int getIndex() {
 		return 1;
 	}
+//	TabbedPanelLeft leftPanel;
+//	ScrollablePicture picture;
 	
 	public ImgSizeComponent(SelectedRegion selectedRegion) {
 		super();
-		
-		
+//		this.leftPanel = leftPanel;
+//		this.shape = leftPanel.getPicturePanel().getScrollPanel().getPicture().getShape();
+//		this.picture = leftPanel.getPicturePanel().getScrollPanel().getPicture();
 //		this.coords = coords;
 		lblX1 = new JLabel("Start x:");
 		lblX2 = new JLabel("End x:");
@@ -157,6 +161,8 @@ public class ImgSizeComponent extends JComponent{
 			}
 			public void focusLost(FocusEvent e) {
 				selectedRegion.updateSelectedRegion(ImageUtils.loadImage(ImgList.images.get(TabbedPanelLeft.getIndex())).getSubimage(Coords.getX1(), Coords.getY1(), Coords.getX2(), Coords.getY2()));
+//				shape = null;
+//				picture.repaint();
 			}
 		});
 		

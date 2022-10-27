@@ -24,7 +24,7 @@ public class PicturePanel extends JPanel {
     	return scrollPanel;
     }
     
-	public PicturePanel() {
+	public PicturePanel(JTabbedPane tabbedPaneRight) {
 		super();
 		
 		setLayout(new GridLayout(2,1));
@@ -32,7 +32,7 @@ public class PicturePanel extends JPanel {
 		
 		selectedAreaPanel.setLayout(new BorderLayout());
 		selectedAreaPanel.setBackground(Color.red);
-		scrollPanel = new ScrollPanel(selectedAreaPanel);
+		scrollPanel = new ScrollPanel(selectedAreaPanel, tabbedPaneRight);
 		
 		add(scrollPanel);
 		add(selectedAreaPanel);
