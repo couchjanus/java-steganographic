@@ -29,7 +29,7 @@ public class ConfigPanel extends JComponent{
 		PicturePanel picturePanel = leftPanel.getPicturePanel();
 		SelectedRegion selectedRegion = picturePanel.getSelectedRegion();
 		
-		ImgSizeComponent imgSizeComponent = new ImgSizeComponent(selectedRegion);
+		ImgSizeComponent imgSizeComponent = new ImgSizeComponent(selectedRegion, leftPanel);
 		imgSizeComponent.setBorder(BorderFactory.createTitledBorder("Selected Image Region"));
 
 		setLayout(new FlowLayout());

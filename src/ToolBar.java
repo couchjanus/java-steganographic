@@ -8,17 +8,22 @@ import javax.swing.border.*;
 public class ToolBar extends JToolBar{
 	private JTabbedPane TPane;
 	JTabbedPane tabbedPaneRight;
+	private PicturePanel currentTabPicturel;
+	
+	public PicturePanel getCurrentTabPicturel(){
+		return currentTabPicturel;
+	}
 	
 	Action newAction = new AbstractAction("New Picture", null) {
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			PicturePanel tabPanel = new PicturePanel();
-			
+			currentTabPicturel = new PicturePanel(tabbedPaneRight);
+//			currentTabPicture = tabPanel;
 			int tabCount = TPane.getTabCount();
 			String title = "New Picture" + String.valueOf(tabCount);
 			
-			TPane.addTab(title, tabPanel);
+			TPane.addTab(title, currentTabPicturel);
 			Coords.setX1(0);
 			Coords.setX2(0);
 			Coords.setY1(0);
@@ -32,6 +37,7 @@ public class ToolBar extends JToolBar{
 		super();
 		this.TPane = TPane;
 		this.tabbedPaneRight = tabbedPaneRight;
+//		this.currentTabPicturel = currentTabPicturel;
 		
 		add(Box.createHorizontalGlue());
 		setBorder(new LineBorder(Color.LIGHT_GRAY, 1));

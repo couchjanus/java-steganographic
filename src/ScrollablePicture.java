@@ -22,18 +22,23 @@ public class ScrollablePicture extends JLabel
     private SelectedRegion selectedRegion;
     private BufferedImage image;
     private String path;
+    JTabbedPane tabbedPaneRight;
+    private  boolean repaintShape = false;
     
-    public Shape getShape() {
-    	return shape;
+    public  boolean getShapeStatus() {
+    	return repaintShape;
     }
     
-   
+    public void setShapeStatus(boolean v) {
+    	repaintShape=v;
+    }
     
     public ScrollablePicture(ImageIcon i, int m, SelectedRegion selectedRegion, String path, JTabbedPane tabbedPaneRight) {
         super(i);
         this.selectedRegion = selectedRegion;
         this.path = path;
         this.image = ImageUtils.loadImage(this.path);
+        this.tabbedPaneRight = tabbedPaneRight;
         
         Coords.setX1(0);
 		Coords.setX2(image.getWidth());
@@ -63,6 +68,7 @@ public class ScrollablePicture extends JLabel
         		endDrag = startDrag;
         		tabbedPaneRight.setSelectedIndex(0);
         		System.out.println(endDrag);
+        		repaintShape = false;
         		repaint();
         	}
             public void mouseReleased(MouseEvent e) {
@@ -188,6 +194,23 @@ public class ScrollablePicture extends JLabel
 			if(startDrag != null && endDrag != null) {
 				g2.setPaint(Color.LIGHT_GRAY);
 				Shape r = makeRectangle(startDrag.x, startDrag.y, endDrag.x, endDrag.y);
+				g2.draw(r);
+			}
+			
+			if (repaintShape) {
+				System.out.println(repaintShape);
+				shape = makeRectangle(Coords.getX1(), Coords.getY1(), Coords.getX2(), Coords.getY2());
+				g2.setStroke(new BasicStroke(2));
+				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.20f));
+				repaint(); 
+				g2.setPaint(Color.BLACK);
+				g2.draw(shape);
+				
+				g2.setPaint(Color.GREEN);
+				g2.fill(shape);
+				
+				g2.setPaint(Color.LIGHT_GRAY);
+				Shape r = makeRectangle(Coords.getX1(), Coords.getY1(), Coords.getX2(), Coords.getY2());
 				g2.draw(r);
 			}
 		}

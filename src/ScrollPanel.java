@@ -29,8 +29,8 @@ implements ItemListener{
     	return selectedRegion;
     }
     
-    public JScrollPane getPictureScrollPane() {
-    	return pictureScrollPane;
+    public ScrollablePicture getPictureScrollPane() {
+    	return picture;
     }
     
 	public ScrollPanel(SelectedRegion selectedRegion, JTabbedPane tabbedPaneRight) {

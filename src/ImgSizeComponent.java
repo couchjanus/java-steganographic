@@ -16,19 +16,22 @@ public class ImgSizeComponent extends JComponent{
 	public NumericTextField txtX1, txtX2, txtY1, txtY2;
 
 	private BufferedImage image;
-	
+	TabbedPanelLeft leftPanel;
 	private int w, h;
 	Shape shape;
 	
 	public static int getIndex() {
 		return 1;
 	}
-//	TabbedPanelLeft leftPanel;
+	PicturePanel picturePanel;
 //	ScrollablePicture picture;
 	
-	public ImgSizeComponent(SelectedRegion selectedRegion) {
+	public ImgSizeComponent(SelectedRegion selectedRegion, TabbedPanelLeft leftPanel) {
 		super();
-//		this.leftPanel = leftPanel;
+		this.leftPanel = leftPanel;
+		
+		picturePanel = leftPanel.getCurrentTabPicture();
+		System.out.println("picturePanel "+picturePanel);
 //		this.shape = leftPanel.getPicturePanel().getScrollPanel().getPicture().getShape();
 //		this.picture = leftPanel.getPicturePanel().getScrollPanel().getPicture();
 //		this.coords = coords;
@@ -77,7 +80,8 @@ public class ImgSizeComponent extends JComponent{
 //					System.out.println(txtX1.getLongValue());
 					int v = Math.toIntExact(txtX1.getLongValue());
 					Coords.setX1(v);
-					System.out.println("Width: "+ImgList.width.get(0));
+					leftPanel.getPicturePanel().getScrollPanel().getPictureScrollPane().setShapeStatus(true);
+//					System.out.println("Width: "+ImgList.width.get(0));
 				}catch(ParseException e1) {
 					System.out.println(e1);
 				}
@@ -91,6 +95,7 @@ public class ImgSizeComponent extends JComponent{
 //					System.out.println(txtX1.getLongValue());
 					int v = Math.toIntExact(txtX2.getLongValue());
 					Coords.setX2(v);
+					leftPanel.getPicturePanel().getScrollPanel().getPictureScrollPane().setShapeStatus(true);
 				}catch(ParseException e1) {
 					System.out.println(e1);
 				}
@@ -104,6 +109,7 @@ public class ImgSizeComponent extends JComponent{
 //					System.out.println(txtX1.getLongValue());
 					int v = Math.toIntExact(txtY2.getLongValue());
 					Coords.setY2(v);
+					leftPanel.getPicturePanel().getScrollPanel().getPictureScrollPane().setShapeStatus(true);
 				}catch(ParseException e1) {
 					System.out.println(e1);
 				}
@@ -114,9 +120,9 @@ public class ImgSizeComponent extends JComponent{
 			@Override
 			public void update(DocumentEvent e) {
 				try {
-//					System.out.println(txtX1.getLongValue());
 					int v = Math.toIntExact(txtY1.getLongValue());
 					Coords.setY1(v);
+					leftPanel.getPicturePanel().getScrollPanel().getPictureScrollPane().setShapeStatus(true);
 				}catch(ParseException e1) {
 					System.out.println(e1);
 				}
@@ -131,12 +137,8 @@ public class ImgSizeComponent extends JComponent{
 				txtY2.setValue(Coords.getY2());
 			}
 			public void focusLost(FocusEvent e) {
-//				image = ImageUtils.loadImage(ImgList.images.get(TabbedPanelLeft.getIndex()));
-//				
-//				w = image.getWidth();
-//				h = image.getHeight();
-				
 				selectedRegion.updateSelectedRegion(ImageUtils.loadImage(ImgList.images.get(TabbedPanelLeft.getIndex())).getSubimage(Coords.getX1(), Coords.getY1(), Coords.getX2(), Coords.getY2()));
+				leftPanel.getPicturePanel().getScrollPanel().repaint();
 			}
 		});
 		
@@ -149,6 +151,7 @@ public class ImgSizeComponent extends JComponent{
 			}
 			public void focusLost(FocusEvent e) {
 				selectedRegion.updateSelectedRegion(ImageUtils.loadImage(ImgList.images.get(TabbedPanelLeft.getIndex())).getSubimage(Coords.getX1(), Coords.getY1(), Coords.getX2(), Coords.getY2()));
+				leftPanel.getPicturePanel().getScrollPanel().repaint();
 			}
 		});
 		
@@ -161,8 +164,7 @@ public class ImgSizeComponent extends JComponent{
 			}
 			public void focusLost(FocusEvent e) {
 				selectedRegion.updateSelectedRegion(ImageUtils.loadImage(ImgList.images.get(TabbedPanelLeft.getIndex())).getSubimage(Coords.getX1(), Coords.getY1(), Coords.getX2(), Coords.getY2()));
-//				shape = null;
-//				picture.repaint();
+				leftPanel.getPicturePanel().getScrollPanel().repaint();
 			}
 		});
 		
@@ -175,6 +177,7 @@ public class ImgSizeComponent extends JComponent{
 			}
 			public void focusLost(FocusEvent e) {
 				selectedRegion.updateSelectedRegion(ImageUtils.loadImage(ImgList.images.get(TabbedPanelLeft.getIndex())).getSubimage(Coords.getX1(), Coords.getY1(), Coords.getX2(), Coords.getY2()));
+				leftPanel.getPicturePanel().getScrollPanel().repaint();
 			}
 		});
 		

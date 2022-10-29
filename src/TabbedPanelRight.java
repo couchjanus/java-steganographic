@@ -80,7 +80,7 @@ public class TabbedPanelRight extends JPanel {
 				JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
 				index = sourceTabbedPane.getSelectedIndex();
 				System.out.println("Tabbed index: " + index);
-				System.out.println("Tabbed left: " + TabbedPanelLeft.getIndex());
+//				System.out.println("Tabbed left: " + sourceTabbedPane.getComponentAt(index));
 //			
 				if(ImgList.images.size() > 0){
 //					if((ImgList.images.get(TabbedPanelLeft.getIndex()) != null) && index == 1) {
