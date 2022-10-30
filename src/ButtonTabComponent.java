@@ -64,6 +64,7 @@ public class ButtonTabComponent extends JPanel{
 					ImgList.width.remove(i);
 					ImgList.height.remove(i);
 				}
+				TabbedPanelLeft.picturePanelList.remove(i);
 				pane.remove(i);
 			}
 		}

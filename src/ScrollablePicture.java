@@ -47,9 +47,7 @@ public class ScrollablePicture extends JLabel
 		
 		selectedRegion.updateSelectedRegion(image);
 		repaint();
-		
-//		ImgList.width.add(image.getWidth());
-//        ImgList.height.add(image.getHeight());
+
 		
         if (i == null) {
             missingPicture = true;
@@ -77,9 +75,9 @@ public class ScrollablePicture extends JLabel
         				shape = makeRectangle(startDrag.x, startDrag.y, e.getX(), e.getY());
         				       				
         				Coords.setX1(startDrag.x);
-        				Coords.setX2(e.getX()-startDrag.x);
+        				Coords.setX2(e.getX());
         				Coords.setY1(startDrag.y);
-        				Coords.setY2(e.getY()-startDrag.y);
+        				Coords.setY2(e.getY());
         				Coords.isSelected = true;
         								
         				selectedRegion.updateSelectedRegion(image.getSubimage(startDrag.x, startDrag.y, e.getX()-startDrag.x, e.getY()-startDrag.y));
@@ -198,7 +196,7 @@ public class ScrollablePicture extends JLabel
 			}
 			
 			if (repaintShape) {
-				System.out.println(repaintShape);
+//				System.out.println(repaintShape);
 				shape = makeRectangle(Coords.getX1(), Coords.getY1(), Coords.getX2(), Coords.getY2());
 				g2.setStroke(new BasicStroke(2));
 				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.20f));

@@ -1,7 +1,7 @@
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import javax.swing.event.*;
 
@@ -9,30 +9,18 @@ import javax.swing.event.*;
 public class TabbedPanelLeft extends JPanel {
 	static final long serialVersionUID = -1L; 
 	JTabbedPane tabbedPaneLeft = new JTabbedPane();
+	JTabbedPane tabbedPaneRight;
 	
-	private static int index;
-	PicturePanel currentTabPicture;
-	
-	PicturePanel tabPicture;
+	public static ArrayList<PicturePanel> picturePanelList = new ArrayList<PicturePanel>();
+	private static int index = 0;
 	
 	public static int getIndex() {
 		return index;
 	}
 	
-	public PicturePanel getCurrentTabPicture() {
-		return currentTabPicture;
-	}
-	
 	public PicturePanel getPicturePanel() {
-		return tabPicture;
+		return picturePanelList.get(index);
 	}
-	
-	
-	public TabbedPanelLeft getTabbedPane() {
-		return this;
-	}
-	
-	JTabbedPane tabbedPaneRight;
 	
 	public TabbedPanelLeft(JTabbedPane tabbedPaneRight) {
 		super();
@@ -40,12 +28,9 @@ public class TabbedPanelLeft extends JPanel {
 		
 		setLayout(new BorderLayout());
 		
-		tabPicture = new PicturePanel(tabbedPaneRight);
-		
-//		currentTabPicture = new PicturePanel(tabbedPaneRight);
-		
-//		currentTabPicture = tabPicture;
-		
+		PicturePanel tabPicture = new PicturePanel(tabbedPaneRight);
+		picturePanelList.add(tabPicture);
+				
 		ToolBar toolBar = new ToolBar(tabbedPaneLeft, tabbedPaneRight);
 		
 		add(toolBar, BorderLayout.PAGE_START);
@@ -63,16 +48,12 @@ public class TabbedPanelLeft extends JPanel {
 				JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
 				index = sourceTabbedPane.getSelectedIndex();
 				System.out.println("New Tabbed index: " + index);
-				System.out.println("getScrollPanel(): " + tabPicture.getScrollPanel().getPictureScrollPane());
-//				BufferedImage image = ImageUtils.loadImage(ImgList.images.get(index));
-//				System.out.println("Tabbed left: " + tabbedPaneLeft.getComponentAt(index));
+				
 		        if(tabbedPaneLeft.getTabCount() == ImgList.images.size()) {
 		        	Coords.setX1(0);
 			        Coords.setY1(0);
 					Coords.setX2(ImgList.width.get(index));
 					Coords.setY2(ImgList.height.get(index));	
-					
-					currentTabPicture = toolBar.getCurrentTabPicturel();
 		        }
 		        tabbedPaneRight.setSelectedIndex(0);
 			}
