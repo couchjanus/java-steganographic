@@ -34,9 +34,7 @@ public class ConfigPanel extends JComponent{
 
 		setLayout(new FlowLayout());
 		add(chiComponent);
-		add(imgSizeComponent);
-
-        
+		add(imgSizeComponent);        
 	}
 
 }

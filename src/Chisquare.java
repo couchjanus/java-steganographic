@@ -16,7 +16,7 @@ public class ChiSquare {
 		this.image = image;
 		this.width = this.image.getWidth();
 		this.height = this.image.getHeight();
-//		System.out.println("width= "+ width + " height= "+height );
+
 	}
 	
 	private int[] getValues(int[] values) {
@@ -98,10 +98,11 @@ public class ChiSquare {
 	}
 	
 	public double[] attackLeftToRigth(int chunkSize) {
-		values = getValues(values);
 		this.numChunks = (int) (Math.floor((width * height * 3 / chunkSize)) + 1.0D);
-		this.chiSquareValues = new double[this.numChunks];
+		values = new int[numChunks];
+		values = getValues(values);
 		
+		this.chiSquareValues = new double[this.numChunks];
 		int block = 0;
 		int nbBytes = 1;
 		int red, green, blue;
@@ -146,8 +147,10 @@ public class ChiSquare {
 	}
 	
 	public double[] attackBottomToTop(int chunkSize) {
-		values = getValues(values);
 		this.numChunks = (int) (Math.floor((width * height * 3 / chunkSize)) + 1.0D);
+		values = new int[numChunks];
+		values = getValues(values);
+		
 		this.chiSquareValues = new double[this.numChunks];
 		
 		int block = 0;
@@ -194,10 +197,11 @@ public class ChiSquare {
 	}
 	
 	public double[] attackRightToLeft(int chunkSize) {
-		values = getValues(values);
 		this.numChunks = (int) (Math.floor((width * height * 3 / chunkSize)) + 1.0D);
-		this.chiSquareValues = new double[this.numChunks];
+		values = new int[numChunks];
+		values = getValues(values);
 		
+		this.chiSquareValues = new double[this.numChunks];
 		int block = 0;
 		int nbBytes = 1;
 		int red, green, blue;

@@ -36,8 +36,6 @@ import com.tutego.jrtf.RtfPara;
 
 
 public class PresetsPanel extends JComponent{
-	private int chunkSize = 1024;
-	private int chiDirection = 1;
 	
 	ChiComponent chiComponent;
 	
@@ -47,9 +45,6 @@ public class PresetsPanel extends JComponent{
 	public PresetsPanel(ConfigPanel configPanel, Plot2DPanel chiSquarePanel) {
 		super();
 		
-		
-//		image = ImageUtils.loadImage(imageList.get(TabbedPanelLeft.getIndex()));
-		
         GroupLayout layout = new GroupLayout(this);
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
@@ -58,7 +53,7 @@ public class PresetsPanel extends JComponent{
         JCheckBox chisChackBox = new JCheckBox("Chi Squared");
         JCheckBox spChackBox = new JCheckBox("Detect LSB SPA");
         JCheckBox rsChackBox = new JCheckBox("Rs Preset");
-        JCheckBox aspChackBox = new JCheckBox("Simple PAir");
+        JCheckBox aspChackBox = new JCheckBox("Simple Pair");
         JCheckBox caseChackBox = new JCheckBox("Case Preset");
         
         String[] generate = new String[] {"Choose Reports Format", "Create RTF Report", "Create HTML Report"}; 
@@ -112,34 +107,35 @@ public class PresetsPanel extends JComponent{
 
         			try {
         				if (Coords.isSelected) {
-        					image = copyImage(ImageUtils.loadImage(ImgList.images.get(TabbedPanelLeft.getIndex())).getSubimage(Coords.getX1(), Coords.getY1(), Coords.getX2(), Coords.getY2()));
+        					image = copyImage(ImageUtils.loadImage(ImgList.images.get(TabbedPanelLeft.getIndex())).getSubimage(Coords.getX1(), Coords.getY1(), Coords.getX2()-Coords.getX1(), Coords.getY2()-Coords.getY1()));
 //        					
         				}else {
+//        					
         					image = ImageUtils.loadImage(ImgList.images.get(TabbedPanelLeft.getIndex()));
+//        					
         				}
-        				int numChunks = (int) (Math.floor((image.getWidth() * image.getHeight() * 3 / chunkSize)) + 1.0D);
-        				        				
+        				
+        				
+        				int numChunks = (int) (Math.floor((image.getWidth() * image.getHeight() * 3 / ChiComponent.chunkSize)) + 1.0D);
+
+        				
         				double[] chiSquareAttack = new double[numChunks];
         				double[] avarege = new double[numChunks];
- 
-        				chiComponent = configPanel.getChiConfig();
-        				chunkSize = chiComponent.getChiSize();
-        				
-        				chiDirection = chiComponent.getChiDirection();
-
-        				switch(chiDirection) {
+        				switch(ChiComponent.chiDirection) {
         				case 1:
-        					chiSquareAttack = new ChiSquare(image).attackTopToBottom(chunkSize);
+        					
+        					chiSquareAttack = new ChiSquare(image).attackTopToBottom(ChiComponent.chunkSize);
         					System.out.println("chiSquareAttack = "+chiSquareAttack );
-            				avarege = new AvarageLsb(image).attackTopToBottom(chunkSize);
+            				avarege = new AvarageLsb(image).attackTopToBottom(ChiComponent.chunkSize);
         					break;
         				case 2:
-        					chiSquareAttack = new ChiSquare(image).attackLeftToRigth(chunkSize);
-            				avarege = new AvarageLsb(image).attackLeftToRight(chunkSize);
+        					System.out.println("chiSquare numChunks = "+numChunks );
+        					chiSquareAttack = new ChiSquare(image).attackLeftToRigth(ChiComponent.chunkSize);
+            				avarege = new AvarageLsb(image).attackLeftToRight(ChiComponent.chunkSize);
         					break;
         				case 3:
-        					chiSquareAttack = new ChiSquare(image).attackRightToLeft(chunkSize);
-            				avarege = new AvarageLsb(image).attackRightToLeft(chunkSize);
+        					chiSquareAttack = new ChiSquare(image).attackRightToLeft(ChiComponent.chunkSize);
+            				avarege = new AvarageLsb(image).attackRightToLeft(ChiComponent.chunkSize);
         					break;
         				case 4:
         					break;
@@ -160,7 +156,7 @@ public class PresetsPanel extends JComponent{
         				chiSquarePanel.addPlotable(title);
         				chiSquarePanel.addLinePlot("Chi-Squere", x, chiSquareAttack);
         				chiSquarePanel.addLegend("EAST");
-        				chiSquarePanel.setAxisLabel(0, chunkSize+"-bytes data block");
+        				chiSquarePanel.setAxisLabel(0, ChiComponent.chunkSize+"-bytes data block");
         				chiSquarePanel.setAxisLabel(1, "Avarage LSB value CHi-Squere test");
         				
         				double q = 0;
@@ -255,6 +251,8 @@ public class PresetsPanel extends JComponent{
         		}
         	}
         });
+        
+        
         
         customBox.addActionListener(new ActionListener() {
         	@Override
