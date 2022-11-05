@@ -61,7 +61,7 @@ public class TabbedPanelRight extends JPanel {
 	  tabbedPaneRight.addTab("Welcome", null, welcome, "");
 	  
       chiSquarePanel = new Plot2DPanel();
-      PresetsPanel presetsPanel = new PresetsPanel(configPanel, chiSquarePanel);
+      PresetsPanel presetsPanel = new PresetsPanel(configPanel, chiSquarePanel, tabbedPaneRight);
       tabbedPaneRight.addTab("Presets", null, presetsPanel, "");
       tabbedPaneRight.setMnemonicAt(0, KeyEvent.VK_1);
        
@@ -85,7 +85,7 @@ public class TabbedPanelRight extends JPanel {
 				if(ImgList.images.size() > 0){
 //					if((ImgList.images.get(TabbedPanelLeft.getIndex()) != null) && index == 1) {
 						configPanel = new ConfigPanel(leftPanel);
-						tabbedPaneRight.setComponentAt(tabbedPaneRight.getTabCount()-1, configPanel);
+						tabbedPaneRight.setComponentAt(1, configPanel);
 //					}
 				}
 //				else {
@@ -112,8 +112,9 @@ public class TabbedPanelRight extends JPanel {
 		public void componentAdded(ContainerEvent e) {
 //			tabbedPane.setSelectedIndex(0);
 			configPanel = new ConfigPanel(leftPanel);
-			tabbedPaneRight.addTab("Config", null, configPanel, "");
-			tabbedPaneRight.setSelectedIndex(tabbedPaneRight.getTabCount()-1);
+//			tabbedPaneRight.addTab("Config", null, configPanel, "");
+			tabbedPaneRight.insertTab("Config", null, configPanel, "Config", 1);
+			tabbedPaneRight.setSelectedIndex(1);
 		}
 		public void componentRemoved(ContainerEvent e) {
 			
