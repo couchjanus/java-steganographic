@@ -15,15 +15,12 @@ public class ChannelsWithLSB extends JPanel{
 	private static final long serialVersionUID = 1L;
 
 	int r, g, b, a;
-	String message;
+	String message = "";
+	String result = "";
+	int len = 0;
 	
 	private JTextArea textArea;
-//	int colors[][] = {{255,0,0}, {0,255,0}, {0,0,255}};
-//	String suffixes[] = {"red", "green", "blue"};
-	
-//	for(int k=1; k<4; k++) {
-//		
-//	}
+
 	public ChannelsWithLSB(BufferedImage src, String colorChannel) {
 		super();
 		
@@ -34,11 +31,17 @@ public class ChannelsWithLSB extends JPanel{
 		
 		textArea = new JTextArea(5,20);	
 		textArea.setLineWrap(true);
-		message = getMessage(image);
+		
+		message = decodeSecretMessage(image, colorChannel);
+		for(int i=0; i<len*8; i=i+8) {
+			String sub = message.substring(i, i+8);
+			int m = Integer.parseInt(sub, 2);
+			char ch = (char) m;
+			result+=ch;
+		}
+//		message = getMessage(image);
 //		System.out.println("Secret Message: "+message);
-		textArea.setText(message);
-		
-		
+		textArea.setText(result);
 		add(new JScrollPane(textArea), BorderLayout.SOUTH);
 	}
 
@@ -67,78 +70,6 @@ public class ChannelsWithLSB extends JPanel{
 				image.setRGB(x, y, p);
 			}
 		}
-		
-		
-//		int bitArray[] = new int[8];
-//		
-//		
-//		for (int i=0; i<8; i++) {
-//			bitArray[i] = 1;
-//		}
-		
-		
-//		System.out.println("Secret Message: "+message);
-//		DataBufferInt dbi = (DataBufferInt) image.getRaster().getDataBuffer();
-//		
-//		int[] data = dbi.getData();
-//		
-//		for (int i = 1; i < data.length; i = i + 2) {
-//		for (int j = 1; j < data.length; j = j + 2) {
-//			int bit = data[j-1];
-//			if (bit == 1) {
-//				
-//			}
-//			
-//		}
-//	}
-		
-//		BufferedImage result = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_BYTE_INDEXED);
-//		result.getGraphics().drawImage(image, 0, 0, null);
-//		
-//		WritableRaster raster = result.getRaster();
-//
-//		int[] tmp = new int[4];
-////		
-////		int[] pixel;
-//		for(int i = 0; i < raster.getHeight(); i++) {
-//
-//			for(int j = 0; j < raster.getWidth(); j++) {
-//				int[] pixel = raster.getPixel(i, j, tmp);
-////				System.out.println(pixel.length);
-////				if (pixel[0] == 1) {
-////					pixel[0]=255;
-////				}else {
-////					pixel[0]=0;
-////				}
-//				for(int k = 0; k < pixel.length; k++) {
-//					if (pixel[k] == 1) {
-//						pixel[k]=255;
-//					}else {
-//						pixel[k]=0;
-//					}
-//				}
-//				raster.setPixel(j, i, pixel);
-//			}
-//
-//		}
-		
-//		int[] pixels = new int[image.getWidth()];
-//		for(int y = 0; y < image.getHeight(); y++) {
-//			
-//			raster.getPixels(0, y, image.getWidth(), 1, pixels);
-//			
-//			for(int i = 0; i<pixels.length; i++) {
-//				
-//				if(pixels[i] < 1) {
-//					pixels[i] = 0;
-//				}else {
-//					pixels[i]=255;
-//				}
-//			}
-//			raster.setPixels(0, y, image.getWidth(), 1, pixels);
-//		}
-//		
-		
 		
 		return image;
 	}
@@ -221,6 +152,57 @@ public class ChannelsWithLSB extends JPanel{
 			return "";
 		}
 		
+	}
+	
+	public String decodeSecretMessage(BufferedImage image, String colorChannel) {
+		String secretMessage = "";
+		String notSecretMessage = "";
+		int currentBit = 0;
+		String msg = "";
+		
+		for (int x = 0; x<image.getWidth(); x++) {
+			for(int y=0; y<image.getHeight(); y++) {
+				if(x==0 && y<8) {
+					int currentPixel = image.getRGB(x, y);
+					
+					if (colorChannel == "red") {
+						int red = (currentPixel >> 16) & 0xff;
+						msg = Integer.toBinaryString(red);
+					}
+					else if (colorChannel == "green") {
+						int green = (currentPixel >> 8) & 0xff;
+						msg = Integer.toBinaryString(green);
+					}
+					else if (colorChannel == "blue") {
+						int blue = currentPixel & 0xff;
+						msg = Integer.toBinaryString(blue);
+					}
+					
+					notSecretMessage+=msg.charAt(msg.length()-1);
+					len = Integer.parseInt(notSecretMessage, 2);
+					
+				}
+				else if(currentBit<len*8) {
+					int currentPixel = image.getRGB(x, y);
+					
+					if (colorChannel == "red") {
+						int red = (currentPixel >> 16) & 0xff;
+						msg = Integer.toBinaryString(red);
+					}
+					else if (colorChannel == "green") {
+						int green = (currentPixel >> 8) & 0xff;
+						msg = Integer.toBinaryString(green);
+					}
+					else if (colorChannel == "blue") {
+						int blue = currentPixel & 0xff;
+						msg = Integer.toBinaryString(blue);
+					}
+					secretMessage+=msg.charAt(msg.length()-1);
+					currentPixel++;
+				}
+			}
+		}
+		return secretMessage;
 	}
 	
 	
