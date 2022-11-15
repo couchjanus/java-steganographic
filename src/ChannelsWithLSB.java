@@ -4,6 +4,7 @@ import java.awt.image.DataBufferByte;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 import java.awt.image.DataBufferInt;
 import java.awt.image.WritableRaster;
 
@@ -20,29 +21,101 @@ public class ChannelsWithLSB extends JPanel{
 	int len = 0;
 	
 	private JTextArea textArea;
+	
+	private JCheckBox bit0, bit1, bit2, bit3, bit4, bit5, bit6, bit7;
 
+	private JCheckBox bitsArray[] = new JCheckBox[8];
+	private JButton extractText;
+	
+	private JPanel bitsPanel;
+	private BufferedImage image;
+	
 	public ChannelsWithLSB(BufferedImage src, String colorChannel) {
 		super();
 		
+		
+		bit0 = new JCheckBox();
+		bit1 = new JCheckBox();
+		bit2 = new JCheckBox(); 
+		bit3 = new JCheckBox(); 
+		bit4 = new JCheckBox(); 
+		bit5 = new JCheckBox(); 
+		bit6 = new JCheckBox(); 
+		bit7 = new JCheckBox();
+		
+		bit0.setText("0"); 
+		bit1.setText("1"); 
+		bit2.setText("2"); 
+		bit3.setText("3"); 
+		bit4.setText("4"); 
+		bit5.setText("5"); 
+		bit6.setText("6"); 
+		bit7.setText("0");
+		
+		bitsArray[0] = bit0;
+		bitsArray[1] = bit1;
+		bitsArray[2] = bit2;
+		bitsArray[3] = bit3;
+		bitsArray[4] = bit4;
+		bitsArray[5] = bit5;
+		bitsArray[6] = bit6;
+		bitsArray[7] = bit7;
+		
+		extractText = new JButton("Extract Text");
+		extractText.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				extractTextPerformed(e);
+			}
+		});
+		bitsPanel = new JPanel(new GridLayout(3,3));
+		
+		
+		bitsPanel.add(bit0);
+		
+		bitsPanel.add(bit1);
+		bitsPanel.add(bit2);
+		bitsPanel.add(bit3);
+		bitsPanel.add(bit4);
+		bitsPanel.add(bit5);
+		bitsPanel.add(bit6);
+		bitsPanel.add(bit7);
+		bitsPanel.add(extractText);
+		
 		setLayout(new BorderLayout());
 		setSize(300, 400);
-		BufferedImage image = getChannel(src, colorChannel);
-		add(new JScrollPane(new ImageComponent(getChannel(src, colorChannel))), BorderLayout.NORTH);
+		add(bitsPanel, BorderLayout.NORTH);
+		image = getChannel(src, colorChannel);
+		add(new JScrollPane(new ImageComponent(getChannel(src, colorChannel))), BorderLayout.CENTER);
 		
 		textArea = new JTextArea(5,20);	
 		textArea.setLineWrap(true);
 		
-		message = decodeSecretMessage(image, colorChannel);
-		for(int i=0; i<len*8; i=i+8) {
-			String sub = message.substring(i, i+8);
-			int m = Integer.parseInt(sub, 2);
-			char ch = (char) m;
-			result+=ch;
-		}
+//		message = decodeSecretMessage(image, colorChannel);
+//		for(int i=0; i<len*8; i=i+8) {
+//			String sub = message.substring(i, i+8);
+//			int m = Integer.parseInt(sub, 2);
+//			char ch = (char) m;
+//			result+=ch;
+//		}
 //		message = getMessage(image);
 //		System.out.println("Secret Message: "+message);
-		textArea.setText(result);
+//		textArea.setText(result);
 		add(new JScrollPane(textArea), BorderLayout.SOUTH);
+	}
+	
+	private void extractTextPerformed(ActionEvent e) {
+		if (image == null) return;
+		int bitArray[] = new int[8];
+		
+		for (int i=0; i<8;i++) {
+			if(bitsArray[i].isSelected()) {
+				bitArray[i] = 1;
+			}else {
+				bitArray[i] = 0;
+			}
+			String message = decodeText(image, bitArray);
+			textArea.setText(message);
+		}
 	}
 
 	private BufferedImage getChannel(BufferedImage src, String colorChannel) {

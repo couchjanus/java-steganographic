@@ -64,6 +64,7 @@ public class PresetsPanel extends JComponent{
         JCheckBox rsChackBox = new JCheckBox("Rs Preset");
         JCheckBox aspChackBox = new JCheckBox("Simple Pair");
         JCheckBox caseChackBox = new JCheckBox("Channels with LSB");
+        JCheckBox xorChackBox = new JCheckBox("Bitwise XOR");
         
         String[] generate = new String[] {"Choose Reports Format", "Create RTF Report", "Create HTML Report"}; 
         String[] prisets = new String[] {"Select a Group", "All Prisets", "Custom Prisets", "Split By Channels"}; 
@@ -81,6 +82,7 @@ public class PresetsPanel extends JComponent{
         				.addComponent(rsChackBox)
         				.addComponent(aspChackBox)
         				.addComponent(caseChackBox)
+        				.addComponent(xorChackBox)
         				.addComponent(reportBox)
         				)
         		
@@ -103,6 +105,9 @@ public class PresetsPanel extends JComponent{
         	.addGroup(layout.createParallelGroup(LEADING)
         				.addComponent(caseChackBox)
         				)
+        	.addGroup(layout.createParallelGroup(LEADING)
+        			.addComponent(xorChackBox)
+    				)
         		.addGroup(layout.createParallelGroup(BASELINE)
         				.addComponent(reportBox)
         				)
@@ -315,6 +320,30 @@ public class PresetsPanel extends JComponent{
         				System.out.println("Split image by channels ");
 //        				System.out.println("RSA into Red = " + result[1]);
 
+        			}catch(Exception ex) {}
+        			
+
+        		}else {
+        			System.out.println("It's deselected");
+        		}
+        	}
+        });
+        
+        xorChackBox.addItemListener(new ItemListener() {
+        	@Override
+        	public void itemStateChanged(ItemEvent event) {
+        		if(event.getStateChange() == ItemEvent.SELECTED) {
+        			try {
+        				if (Coords.isSelected) {
+        					image = copyImage(ImageUtils.loadImage(ImgList.images.get(TabbedPanelLeft.getIndex())).getSubimage(Coords.getX1(), Coords.getY1(), Coords.getX2()-Coords.getX1(), Coords.getY2()-Coords.getY1()));
+        				}else {
+        					image = ImageUtils.loadImage(ImgList.images.get(TabbedPanelLeft.getIndex()));
+        				}
+        				
+        				BitwiseXORPanel xorPanel = new BitwiseXORPanel(image);
+        				
+        				tabbedPanelRight.addTab("Bitwise XOR", null, xorPanel, "Bitwise XOR");
+        				
         			}catch(Exception ex) {}
         			
 
